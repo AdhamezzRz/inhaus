@@ -1,0 +1,104 @@
+{%- liquid
+  assign menu = linklists[section.settings.menu]
+-%}
+<header class="header" data-header>
+  {%- if section.blocks.size > 0 -%}
+    <div class="announce" aria-live="polite">
+      {%- for block in section.blocks -%}
+        <p class="announce__item{% if forloop.first %} is-active{% endif %}" {{ block.shopify_attributes }}>
+          {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}">{{ block.settings.text }}</a>{%- else -%}{{ block.settings.text }}{%- endif -%}
+        </p>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  <div class="header__bar">
+    <nav class="header__nav" aria-label="Primary">
+      <button type="button" class="header__burger" aria-expanded="false" aria-controls="site-menu" data-menu-toggle>
+        <span></span><span></span><em>Menu</em>
+      </button>
+      <div class="header__links">
+        <a href="{{ routes.all_products_collection_url }}" class="ulink">Shop</a>
+        {%- if pages['the-haus'] != empty -%}<a href="{{ pages['the-haus'].url }}" class="ulink">The Haus</a>{%- endif -%}
+        {%- if blogs.journal.url -%}<a href="{{ blogs.journal.url }}" class="ulink">Journal</a>{%- endif -%}
+      </div>
+    </nav>
+
+    <a href="{{ routes.root_url }}" class="header__logo" aria-label="{{ shop.name }} — home">
+      <span id="header-logo">{% render 'wordmark' %}</span>
+    </a>
+
+    <div class="header__actions">
+      <button type="button" class="header__lights ulink" data-lights aria-label="Switch the lights">
+        <span class="bulb" aria-hidden="true"></span>
+        <span class="header__lights-text" data-lights-text>Lights off</span>
+      </button>
+      <a href="{{ routes.cart_url }}" class="header__pouch" id="pouch-target" data-pouch-open aria-label="Open your pouch">
+        {% render 'icon-pouch', class: 'header__pouch-icon' %}
+        <span class="header__count"><span data-cart-count>{{ cart.item_count }}</span></span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="menu" id="site-menu" aria-hidden="true" data-menu>
+  <div class="menu__pattern"></div>
+  <ul class="menu__list">
+    {%- if menu.links.size > 0 -%}
+      {%- for link in menu.links -%}
+        {%- liquid
+          assign peek = nil
+          if link.type == 'collection_link'
+            assign peek = link.object.featured_image
+          elsif link.type == 'page_link' and section.settings.page_image
+            assign peek = section.settings.page_image
+          elsif link.type == 'blog_link' and section.settings.blog_image
+            assign peek = section.settings.blog_image
+          elsif link.type == 'catalog_link' and section.settings.catalog_image
+            assign peek = section.settings.catalog_image
+          endif
+        -%}
+        <li class="menu__item">
+          <a href="{{ link.url }}" class="menu__link">
+            <small>{{ forloop.index | prepend: '0' | slice: -2, 2 }}</small>
+            <span>{{ link.title }}</span>
+            {%- if peek -%}{{ peek | image_url: width: 400 | image_tag: class: 'menu__peek', alt: '', loading: 'lazy' }}{%- endif -%}
+          </a>
+        </li>
+      {%- endfor -%}
+    {%- else -%}
+      <li class="menu__item"><a href="{{ routes.all_products_collection_url }}" class="menu__link"><small>01</small><span>Shop all</span></a></li>
+      <li class="menu__item"><a href="{{ routes.collections_url }}" class="menu__link"><small>02</small><span>Rooms</span></a></li>
+    {%- endif -%}
+  </ul>
+  <div class="menu__foot">
+    <span>{{ settings.tagline }}</span>
+    <span>{{ section.settings.menu_note }}</span>
+    <button type="button" class="ulink" data-lights>Switch the lights</button>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "section-header",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
+    { "type": "text", "id": "menu_note", "label": "Menu footnote", "default": "Cairo — shipping across Egypt" },
+    { "type": "image_picker", "id": "catalog_image", "label": "Menu photo for 'Shop all'" },
+    { "type": "image_picker", "id": "page_image", "label": "Menu photo for pages" },
+    { "type": "image_picker", "id": "blog_image", "label": "Menu photo for the journal" }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "Complimentary delivery across Egypt on orders over EGP 5,000" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,21 @@
+<section class="haus-hero" data-header-tone="dark">
+  <div class="haus-hero__mark">{% render 'wordmark', write: true, uid: 'haus-intro' %}</div>
+  <p class="t-caps" data-reveal>{{ section.settings.eyebrow }}</p>
+  <h1 class="t-display pagehead__title" data-split="chars">{{ section.settings.title }}</h1>
+  <div class="pagehead__lede" data-reveal data-delay="0.3">
+    {%- if section.settings.use_page_content and page.content != blank -%}{{ page.content }}{%- else -%}{{ section.settings.text }}{%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Story intro",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Our story" },
+    { "type": "text", "id": "title", "label": "Title", "default": "made to be lived in" },
+    { "type": "checkbox", "id": "use_page_content", "label": "Use the page’s own text", "default": true },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p><em>Inn</em> — to stay in. <em>Haus</em> — the place you never want to leave.</p>" }
+  ],
+  "presets": [{ "name": "Story intro" }]
+}
+{% endschema %}

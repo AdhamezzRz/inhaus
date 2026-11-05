@@ -1,0 +1,15 @@
+<a href="{{ article.url }}" class="jcard" data-cursor="read" data-reveal data-delay="{{ index | default: 0 | times: 0.12 }}">
+  <span class="jcard__img" data-img-reveal>
+    {%- if article.image -%}
+      {{ article.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '400,600,900', sizes: '(max-width: 860px) 90vw, 30vw', alt: article.image.alt }}
+    {%- else -%}
+      <img src="{{ 'l-reading.webp' | asset_url }}" alt="" loading="lazy" width="880" height="1168">
+    {%- endif -%}
+  </span>
+  <span class="jcard__meta">
+    {%- if article.tags.size > 0 -%}<span>{{ article.tags.first }}</span>{%- endif -%}
+    <span>{{ article.published_at | date: '%-d %B %Y' }}</span>
+  </span>
+  <span class="jcard__title">{{ article.title }}</span>
+  <span class="jcard__excerpt">{{ article.excerpt_or_content | strip_html | truncatewords: 22 }}</span>
+</a>

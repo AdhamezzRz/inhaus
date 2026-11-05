@@ -1,0 +1,28 @@
+<section class="story" data-header-tone="dark">
+  <figure class="story__img" data-img-reveal>
+    {%- if section.settings.image != blank -%}
+      {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '600,900,1200', sizes: '(max-width: 860px) 90vw, 45vw', alt: section.settings.image.alt }}
+    {%- else -%}
+      <img src="{{ section.settings.fallback | asset_url }}" alt="" loading="lazy" width="880" height="1168">
+    {%- endif -%}
+  </figure>
+  <div class="story__text">
+    <p class="t-caps">{{ section.settings.label }}</p>
+    <h2 class="t-display" data-split="lines">{{ section.settings.title }}</h2>
+    <div class="rte" data-reveal>{{ section.settings.text }}</div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Photo + story",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo" },
+    { "type": "text", "id": "fallback", "label": "Fallback photo (theme asset)", "default": "l-kitchen.webp" },
+    { "type": "text", "id": "label", "label": "Label", "default": "01 — Why loungewear" },
+    { "type": "text", "id": "title", "label": "Title", "default": "the clothes you actually live in" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Most wardrobes are built for the outside world. Ours is built for the inside one — the clothes you change into the second you get home, the ones you’d happily answer the door in.</p><p>So we design them like everything else that matters: long-staple cotton, piping you can feel, buttons that look like they came from your grandmother’s tin, and fits that move with you from the bed to the bakery.</p>" }
+  ],
+  "presets": [{ "name": "Photo + story" }]
+}
+{% endschema %}

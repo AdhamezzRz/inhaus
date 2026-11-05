@@ -1,0 +1,84 @@
+{%- assign blobs = 'M0.52,0.02 C0.74,0.0,0.96,0.14,0.98,0.40 C1.0,0.62,0.9,0.86,0.66,0.96 C0.44,1.04,0.16,0.94,0.06,0.72 C-0.04,0.5,0.04,0.22,0.24,0.1 C0.33,0.05,0.42,0.03,0.52,0.02 Z' -%}
+<section class="rooms" data-header-tone="dark" data-section-type="rooms" id="rooms">
+  <svg width="0" height="0" class="sr-only" aria-hidden="true">
+    <clipPath id="room-blob-{{ section.id }}" clipPathUnits="objectBoundingBox"><path d="{{ blobs }}"/></clipPath>
+  </svg>
+
+  <div class="rooms__head">
+    <p class="t-caps">{{ section.settings.label }}</p>
+    <h2 class="t-display" data-split="lines">{{ section.settings.title }}</h2>
+  </div>
+
+  <div class="rooms__grid" style="--blob: url(#room-blob-{{ section.id }})">
+    <div class="rooms__sticky">
+      <div class="rooms__visual">
+        {%- for block in section.blocks -%}
+          {%- if block.settings.image != blank -%}
+            {{ block.settings.image | image_url: width: 1200 | image_tag: class: 'rooms__img', loading: 'lazy', widths: '600,900,1200', sizes: '45vw', alt: '' }}
+          {%- else -%}
+            <img class="rooms__img" src="{{ block.settings.fallback | asset_url }}" alt="" loading="lazy" width="880" height="1168">
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      <div class="rooms__plate" aria-hidden="true"><em>N°</em><span>01</span></div>
+    </div>
+
+    <div class="rooms__panels">
+      {%- for block in section.blocks -%}
+        {%- assign c = block.settings.collection -%}
+        <article class="room" data-number="{{ forloop.index | prepend: '0' | slice: -2, 2 }}" data-tint="{{ block.settings.tint }}" {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}
+            {{ block.settings.image | image_url: width: 900 | image_tag: class: 'room__img-m', loading: 'lazy', alt: '' }}
+          {%- else -%}
+            <img class="room__img-m" src="{{ block.settings.fallback | asset_url }}" alt="" loading="lazy" width="880" height="1168">
+          {%- endif -%}
+          <p class="t-caps room__num">Room {{ forloop.index | prepend: '0' | slice: -2, 2 }}</p>
+          <h3 class="room__name t-display">{{ block.settings.name | default: c.title }}</h3>
+          <p class="room__line">{{ block.settings.line }}</p>
+          <p class="room__desc">{{ block.settings.description }}</p>
+          {%- if c != blank -%}
+            <div class="room__chips">
+              {%- for product in c.products limit: 3 -%}
+                <a href="{{ product.url }}" class="room__chip" data-cursor="view">
+                  {{ product.featured_media | image_url: width: 300 | image_tag: loading: 'lazy', alt: '' }}
+                  <span>{{ product.title }}</span>
+                  <em>{{ product.price | money_without_trailing_zeros }}</em>
+                </a>
+              {%- endfor -%}
+            </div>
+            <a href="{{ c.url }}" class="btn btn--ghost"><span>Enter the room</span></a>
+          {%- endif -%}
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Rooms",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "N° 04 — Walk through the haus" },
+    { "type": "text", "id": "title", "label": "Title", "default": "every room has a uniform" }
+  ],
+  "blocks": [
+    {
+      "type": "room",
+      "name": "Room",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "text", "id": "name", "label": "Name" },
+        { "type": "text", "id": "line", "label": "One-liner" },
+        { "type": "textarea", "id": "description", "label": "Description" },
+        { "type": "image_picker", "id": "image", "label": "Photo" },
+        { "type": "text", "id": "fallback", "label": "Fallback photo (theme asset)", "default": "l-stretch.webp" },
+        { "type": "select", "id": "tint", "label": "Background tint", "default": "burgundy", "options": [
+          { "value": "burgundy", "label": "Blush" }, { "value": "sage", "label": "Sage" }, { "value": "blue", "label": "Dusty blue" }
+        ] }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Rooms" }]
+}
+{% endschema %}

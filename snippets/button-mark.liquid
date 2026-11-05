@@ -1,0 +1,12 @@
+{%- comment -%}
+  A four-hole sewing button from the brand palette page.
+  {% render 'button-mark', color: '#737B5B', class: 'x', holes: 'var(--paper)' %}
+{%- endcomment -%}
+<svg class="{{ class }}" viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+  <circle cx="20" cy="20" r="19" fill="{{ color | default: 'currentColor' }}"/>
+  <circle cx="20" cy="20" r="14" fill="none" stroke="{{ ring | default: 'rgba(0,0,0,.18)' }}" stroke-width="1.2"/>
+  <circle cx="16.2" cy="16.2" r="2.4" fill="{{ holes | default: 'var(--paper)' }}"/>
+  <circle cx="23.8" cy="16.2" r="2.4" fill="{{ holes | default: 'var(--paper)' }}"/>
+  <circle cx="16.2" cy="23.8" r="2.4" fill="{{ holes | default: 'var(--paper)' }}"/>
+  <circle cx="23.8" cy="23.8" r="2.4" fill="{{ holes | default: 'var(--paper)' }}"/>
+</svg>

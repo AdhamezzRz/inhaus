@@ -1,0 +1,21 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "eyebrow": "The haus list",
+        "title": "come over more often",
+        "text": "New drops, slow-living notes and first dibs on restocks. No spam — we hate it too.",
+        "rooms": ["day-in", "friends-house", "quick-errand", "little-things"],
+        "menu": "inhaus-footer",
+        "email": "hello@innhaus.com",
+        "instagram": "innhaus",
+        "tiktok": "innhaus",
+        "base_note": "Made in Cairo, for staying in"
+      }
+    }
+  },
+  "order": ["footer"]
+}

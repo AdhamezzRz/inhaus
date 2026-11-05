@@ -1,0 +1,53 @@
+{%- liquid
+  assign start = 2
+  if section.blocks.size < 3
+    assign start = 0
+  endif
+  assign first = section.blocks[start]
+-%}
+<section class="palette" data-section-type="palette" data-header-tone="light" style="background-color: {{ first.settings.color }}; color: {{ first.settings.ink }};">
+  <p class="t-caps">{{ section.settings.label }}</p>
+  <h2 class="t-display" data-palette-name>{{ first.settings.name | downcase }}</h2>
+  <p class="palette__note" data-palette-note>{{ first.settings.note }}</p>
+  <div class="palette__row">
+    {%- for block in section.blocks -%}
+      <button
+        type="button"
+        class="palette__btn{% if forloop.index0 == start %} is-on{% endif %}"
+        data-color="{{ block.settings.color }}"
+        data-ink="{{ block.settings.ink }}"
+        data-name="{{ block.settings.name | downcase | escape }}"
+        data-note="{{ block.settings.note | escape }}"
+        aria-pressed="{% if forloop.index0 == start %}true{% else %}false{% endif %}"
+        {{ block.shopify_attributes }}
+      >
+        {%- liquid
+          assign holes = '#F3F0E9'
+          if forloop.first
+            assign holes = '#D9D0C0'
+          endif
+        -%}
+        {% render 'button-mark', color: block.settings.color, holes: holes %}
+        <span class="t-caps">{{ forloop.index | prepend: '0' | slice: -2, 2 }} {{ block.settings.name }}</span>
+        <code>{{ block.settings.color | upcase }}</code>
+      </button>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Colour buttons",
+  "max_blocks": 6,
+  "settings": [{ "type": "text", "id": "label", "label": "Label", "default": "The colour palette" }],
+  "blocks": [
+    { "type": "colour", "name": "Colour", "settings": [
+      { "type": "text", "id": "name", "label": "Name", "default": "Sage Green" },
+      { "type": "color", "id": "color", "label": "Colour", "default": "#737B5B" },
+      { "type": "color", "id": "ink", "label": "Text colour on it", "default": "#F3F0E9" },
+      { "type": "text", "id": "note", "label": "Note", "default": "Our pouch, our piping, our signature." }
+    ] }
+  ],
+  "presets": [{ "name": "Colour buttons" }]
+}
+{% endschema %}

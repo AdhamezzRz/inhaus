@@ -1,0 +1,21 @@
+{%- comment -%} Outputs the room name for a product (from its room:* tag). {%- endcomment -%}
+{%- liquid
+  assign key = ''
+  for t in product.tags
+    if t contains 'room:'
+      assign key = t | remove: 'room:'
+    endif
+  endfor
+  case key
+    when 'day-in'
+      echo 'Day In'
+    when 'friends-house'
+      echo 'Friend’s House'
+    when 'quick-errand'
+      echo 'Quick Errand'
+    when 'little-things'
+      echo 'Little Things'
+    else
+      echo product.type
+  endcase
+-%}

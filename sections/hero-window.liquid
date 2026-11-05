@@ -1,0 +1,64 @@
+{%- liquid
+  assign title = section.settings.title
+  assign left = title | split: '.' | first | append: '.'
+  assign right = title | remove_first: left | strip
+  if right == ''
+    assign left = title
+  endif
+-%}
+<section class="hero" data-header-tone="dark" data-section-type="hero" aria-label="{{ title | escape }}">
+  <div class="hero__stage">
+    <div class="hero__meta">
+      <span>{{ section.settings.eyebrow }}</span>
+      <span>{{ section.settings.eyebrow_right }}</span>
+    </div>
+
+    <div class="hero__media">
+      {%- if section.settings.video != blank -%}
+        {{ section.settings.video | video_tag: autoplay: false, loop: true, muted: true, playsinline: true, controls: false, preload: 'auto', class: 'hero__video', image_size: '1600x' }}
+      {%- else -%}
+        <video class="hero__video" muted loop playsinline preload="auto" poster="{% if section.settings.poster != blank %}{{ section.settings.poster | image_url: width: 1800 }}{% else %}{{ 'l-hero.webp' | asset_url }}{% endif %}">
+          <source src="{{ 'hero.webm' | asset_url }}" type="video/webm">
+          <source src="{{ 'hero.mp4' | asset_url }}" type="video/mp4">
+        </video>
+      {%- endif -%}
+      <div class="hero__sheer hero__sheer--l" aria-hidden="true"></div>
+      <div class="hero__sheer hero__sheer--r" aria-hidden="true"></div>
+      <div class="hero__shade"></div>
+    </div>
+
+    <svg class="hero__outline" aria-hidden="true">
+      <path class="hero__frame"/>
+      <path class="hero__mullion"/>
+      <path class="hero__sill"/>
+    </svg>
+
+    <h1 class="hero__title">
+      <span class="hero__word hero__word--l">{{ left }}</span>
+      <span class="hero__word hero__word--r">{{ right }}</span>
+    </h1>
+
+    <p class="hero__caption t-display">{{ section.settings.caption }}</p>
+
+    <div class="hero__cue">
+      <span class="hero__key" aria-hidden="true"><svg viewBox="0 0 24 48"><circle cx="12" cy="9" r="7"/><path d="M12 16 V44 M12 34 H18 M12 40 H16"/></svg></span>
+      <span>{{ section.settings.cue }}</span>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero — arched window",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow (left)", "default": "Fall 2026 — Loungewear for living in" },
+    { "type": "text", "id": "eyebrow_right", "label": "Eyebrow (right)", "default": "N° 01 — The Day In edit" },
+    { "type": "text", "id": "title", "label": "Title", "info": "Split at the first full stop: one half each side of the window.", "default": "wear it. live in it." },
+    { "type": "text", "id": "caption", "label": "Caption once inside", "default": "Come in. Stay a while." },
+    { "type": "text", "id": "cue", "label": "Scroll cue", "default": "Scroll to step inside" },
+    { "type": "video", "id": "video", "label": "Video", "info": "Optional. Leave empty to use the built-in INN HAUS film." },
+    { "type": "image_picker", "id": "poster", "label": "Poster image" }
+  ],
+  "presets": [{ "name": "Hero — arched window" }]
+}
+{% endschema %}

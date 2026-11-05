@@ -1,0 +1,10 @@
+<section class="plainpage" data-header-tone="dark">
+  <header class="pagehead">
+    <h1 class="t-display pagehead__title" data-split="chars">{{ page.title | downcase }}</h1>
+  </header>
+  <div class="plainpage__body rte" data-reveal>{{ page.content }}</div>
+</section>
+
+{% schema %}
+{ "name": "Page" }
+{% endschema %}

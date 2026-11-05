@@ -1,0 +1,68 @@
+{%- liquid
+  assign rooms = section.settings.rooms
+  assign is_all = false
+  if collection.handle == 'all' or collection.handle == blank
+    assign is_all = true
+  endif
+-%}
+<section class="shop" data-header-tone="dark" data-section-type="collection">
+  <header class="pagehead">
+    <p class="t-caps" data-reveal>{{ section.settings.eyebrow }} · {{ collection.products_count }} pieces</p>
+    <h1 class="t-display pagehead__title" data-split="chars">
+      {%- if is_all -%}{{ section.settings.all_title }}{%- else -%}{{ collection.title | downcase }}{%- endif -%}
+    </h1>
+    <div class="pagehead__lede" data-reveal data-delay="0.2">
+      {%- if collection.description != blank and is_all == false -%}{{ collection.description }}{%- else -%}<p>{{ section.settings.lede }}</p>{%- endif -%}
+    </div>
+  </header>
+
+  <div class="shopbar">
+    <div class="shopbar__rooms" role="tablist" aria-label="Rooms">
+      <a role="tab" href="{{ routes.all_products_collection_url }}" class="chip{% if is_all %} is-on{% endif %}" data-room-chip="all" data-line="{{ section.settings.all_line | escape }}">Every room <sup>{{ collections.all.products_count }}</sup></a>
+      {%- for c in rooms -%}
+        {%- assign key = c.handle -%}
+        <a role="tab" href="{{ c.url }}" class="chip{% if collection.handle == key %} is-on{% endif %}" data-room-chip="{{ key }}" data-line="{{ c.description | strip_html | escape }}">
+          {{ c.title }} <sup>{{ c.products_count }}</sup>
+        </a>
+      {%- endfor -%}
+    </div>
+    <label class="shopbar__sort">
+      <span class="t-caps">Sort</span>
+      <select data-sort>
+        <option value="edit">Our edit</option>
+        <option value="low">Price, low to high</option>
+        <option value="high">Price, high to low</option>
+      </select>
+    </label>
+  </div>
+
+  <p class="shop__roomline" data-roomline>
+    {%- if is_all -%}{{ section.settings.all_line }}{%- else -%}{{ collection.description | strip_html | default: section.settings.all_line }}{%- endif -%}
+  </p>
+
+  {%- paginate collection.products by 48 -%}
+    <div class="pgrid" data-grid data-is-all="{{ is_all }}">
+      {%- for product in collection.products -%}
+        {% render 'product-card', product: product, index: forloop.index0 %}
+      {%- else -%}
+        <p class="shop__empty">This room is still being decorated — check back soon.</p>
+      {%- endfor -%}
+    </div>
+    {%- if paginate.pages > 1 -%}
+      <nav class="pager" aria-label="Pages">{{ paginate | default_pagination }}</nav>
+    {%- endif -%}
+  {%- endpaginate -%}
+</section>
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Fall 2026" },
+    { "type": "text", "id": "all_title", "label": "Title for all products", "default": "the collection" },
+    { "type": "text", "id": "lede", "label": "Intro", "default": "Everything here was made to be lived in — the sofa, the kitchen, the café on the corner." },
+    { "type": "text", "id": "all_line", "label": "Line for all products", "default": "Every soft thing in the haus, all in one place." },
+    { "type": "collection_list", "id": "rooms", "label": "Room chips", "limit": 6 }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,26 @@
+<section class="shop" data-header-tone="dark">
+  <header class="pagehead">
+    <p class="t-caps">Search</p>
+    <h1 class="t-display pagehead__title" data-split="chars">{% if search.performed %}{{ search.results_count }} found{% else %}find it{% endif %}</h1>
+    <form action="{{ routes.search_url }}" method="get" class="tagform tagform--search" role="search">
+      <span class="tagform__hole" aria-hidden="true"></span>
+      <label for="search-q" class="sr-only">Search</label>
+      <input id="search-q" type="search" name="q" value="{{ search.terms | escape }}" placeholder="robe, socks, sunday…">
+      <input type="hidden" name="type" value="product">
+      <button type="submit" class="tagform__btn">Search</button>
+    </form>
+  </header>
+  {%- if search.performed -%}
+    <div class="pgrid">
+      {%- for item in search.results -%}
+        {%- if item.object_type == 'product' -%}{% render 'product-card', product: item, index: forloop.index0 %}{%- endif -%}
+      {%- else -%}
+        <p class="shop__empty">Nothing by that name in the haus — try “set” or “robe”.</p>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{ "name": "Search" }
+{% endschema %}

@@ -1,0 +1,25 @@
+<section class="journal" data-header-tone="dark">
+  <header class="pagehead">
+    <p class="t-caps" data-reveal>{{ section.settings.eyebrow }}</p>
+    <h1 class="t-display pagehead__title" data-split="chars">{{ blog.title | downcase }}</h1>
+    <p class="pagehead__lede" data-reveal data-delay="0.2">{{ section.settings.lede }}</p>
+  </header>
+  {%- paginate blog.articles by 12 -%}
+    <div class="jcards">
+      {%- for article in blog.articles -%}
+        {% render 'article-card', article: article, index: forloop.index0 %}
+      {%- endfor -%}
+    </div>
+    {%- if paginate.pages > 1 -%}<nav class="pager">{{ paginate | default_pagination }}</nav>{%- endif -%}
+  {%- endpaginate -%}
+</section>
+
+{% schema %}
+{
+  "name": "Blog",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Notes from the sofa" },
+    { "type": "text", "id": "lede", "label": "Intro", "default": "Rituals, recipes and reasons to stay in." }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,24 @@
+<section class="journal" data-header-tone="dark">
+  <header class="pagehead">
+    <p class="t-caps">Walk through the haus</p>
+    <h1 class="t-display pagehead__title" data-split="chars">the rooms</h1>
+  </header>
+  <div class="jcards">
+    {%- for c in collections -%}
+      {%- unless c.handle == 'frontpage' -%}
+        <a href="{{ c.url }}" class="jcard" data-cursor="open" data-reveal>
+          <span class="jcard__img" data-img-reveal>
+            {%- if c.featured_image -%}{{ c.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: '' }}{%- endif -%}
+          </span>
+          <span class="jcard__meta"><span>{{ c.products_count }} pieces</span></span>
+          <span class="jcard__title">{{ c.title }}</span>
+          <span class="jcard__excerpt">{{ c.description | strip_html }}</span>
+        </a>
+      {%- endunless -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Collections list" }
+{% endschema %}

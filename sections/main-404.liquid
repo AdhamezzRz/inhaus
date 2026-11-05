@@ -1,0 +1,14 @@
+<section class="lost" data-header-tone="dark">
+  <div class="lost__mark">{% render 'wordmark', write: true, uid: 'lost' %}</div>
+  <p class="t-caps">404 — wrong door</p>
+  <h1 class="t-display">this room is still being decorated</h1>
+  <p>Let’s get you back somewhere cosy.</p>
+  <div class="lost__ctas">
+    <a href="{{ routes.root_url }}" class="btn btn--sage"><span>Back to the living room</span></a>
+    <a href="{{ routes.all_products_collection_url }}" class="btn btn--ghost"><span>Browse the collection</span></a>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "404" }
+{% endschema %}

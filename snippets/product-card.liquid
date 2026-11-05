@@ -1,0 +1,79 @@
+{%- comment -%}
+  Product card with a paper hang tag. The lifestyle photo (2nd product image)
+  spreads out from the cursor on hover; quick add flies the piece into the pouch.
+  {% render 'product-card', product: product, index: forloop.index0 %}
+{%- endcomment -%}
+{%- liquid
+  assign room_key = ''
+  for t in product.tags
+    if t contains 'room:'
+      assign room_key = t | remove: 'room:'
+    endif
+  endfor
+  assign badge = ''
+  if product.tags contains 'bestseller'
+    assign badge = 'Bestseller'
+  elsif product.tags contains 'new'
+    assign badge = 'New'
+  endif
+  assign quick = nil
+  for v in product.variants
+    if v.available and quick == nil
+      if v.title == 'M' or v.title == 'One size' or v.title == 'S/M'
+        assign quick = v
+      endif
+    endif
+  endfor
+  if quick == nil
+    assign quick = product.first_available_variant
+  endif
+  assign swatch = product.metafields.inhaus.color_hex.value | default: '#737B5B'
+  assign colour = product.metafields.inhaus.color_name.value
+  assign subtitle = product.metafields.inhaus.subtitle.value | default: product.type
+  assign alt_media = product.media[1]
+-%}
+<article class="pcard" data-room="{{ room_key }}" data-price="{{ product.price }}" data-flip-id="{{ product.handle }}" style="--i: {{ index | default: 0 }}">
+  <a href="{{ product.url }}" class="pcard__link" data-cursor="view">
+    <span class="pcard__frame">
+      {%- if product.featured_media -%}
+        {{ product.featured_media | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '360,540,720,1000', sizes: '(max-width: 560px) 50vw, (max-width: 1100px) 50vw, 33vw', alt: product.featured_media.alt, class: 'pcard__img' }}
+      {%- endif -%}
+      {%- if alt_media -%}
+        {{ alt_media | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '360,540,720,1000', sizes: '(max-width: 560px) 50vw, 33vw', alt: '', class: 'pcard__alt' }}
+      {%- endif -%}
+      {%- if badge != '' -%}<span class="pcard__badge">{{ badge }}</span>{%- endif -%}
+      <span class="pcard__tag" aria-hidden="true">
+        <i class="pcard__string"></i>
+        <span class="pcard__tagbody">
+          <small>{% render 'room-name', product: product %}</small>
+          <b>{{ product.price | money_without_trailing_zeros }}</b>
+        </span>
+      </span>
+      {%- if product.available and quick -%}
+        <button
+          type="button"
+          class="pcard__quick"
+          data-quick-add="{{ quick.id }}"
+          aria-label="Quick add {{ product.title | escape }}, size {{ quick.title | escape }}"
+        >
+          <span>+ Quick add</span>
+        </button>
+      {%- endif -%}
+    </span>
+    <span class="pcard__body">
+      <span class="pcard__title">{{ product.title }}</span>
+      <span class="pcard__sub">{{ subtitle }}</span>
+      <span class="pcard__row">
+        {% render 'button-mark', color: swatch, class: 'pcard__swatch' %}
+        {%- if colour != blank -%}<span>{{ colour }}</span>{%- endif -%}
+        <span class="pcard__price">
+          {%- if product.available -%}
+            {{ product.price | money_without_trailing_zeros }}
+          {%- else -%}
+            Sold out
+          {%- endif -%}
+        </span>
+      </span>
+    </span>
+  </a>
+</article>

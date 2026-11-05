@@ -1,0 +1,6 @@
+{
+  "general": {
+    "tagged": "Tagged \"{{ tags }}\"",
+    "password_page": { "login_form_heading": "Enter store using password" }
+  }
+}

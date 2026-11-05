@@ -1,0 +1,41 @@
+{%- liquid
+  assign room_tag = ''
+  for t in product.tags
+    if t contains 'room:'
+      assign room_tag = t
+    endif
+  endfor
+  assign shown = 0
+-%}
+<section class="related" data-header-tone="dark">
+  <div class="section-head">
+    <p class="t-caps">{{ section.settings.label }}</p>
+    <h2 class="t-display" data-split="lines">{{ section.settings.title }}</h2>
+  </div>
+  <div class="pgrid pgrid--four">
+    {%- for p in collections.all.products limit: 50 -%}
+      {%- if p.id != product.id and room_tag != '' and p.tags contains room_tag and shown < 4 -%}
+        {% render 'product-card', product: p, index: shown %}
+        {%- assign shown = shown | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- for p in collections.all.products limit: 50 -%}
+      {%- if p.id != product.id and shown < 4 -%}
+        {%- unless room_tag != '' and p.tags contains room_tag -%}
+          {% render 'product-card', product: p, index: shown %}
+          {%- assign shown = shown | plus: 1 -%}
+        {%- endunless -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Complete the look",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "From the same room" },
+    { "type": "text", "id": "title", "label": "Title", "default": "complete the look" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,96 @@
+{%- assign menu = linklists[section.settings.menu] -%}
+<footer class="footer" data-header-tone="light" data-section-type="footer">
+  <div class="footer__pattern" aria-hidden="true"></div>
+  <div class="footer__top">
+    <div class="footer__join">
+      <p class="t-caps">{{ section.settings.eyebrow }}</p>
+      <h2 class="t-display">{{ section.settings.title }}</h2>
+      <p class="footer__lede">{{ section.settings.text }}</p>
+      {%- form 'customer', class: 'tagform', id: 'footer-newsletter' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter, haus-list">
+        <span class="tagform__hole" aria-hidden="true"></span>
+        <label for="footer-email" class="sr-only">Email</label>
+        <input id="footer-email" type="email" name="contact[email]" required placeholder="your@email.com" autocomplete="email">
+        <button type="submit" class="tagform__btn">Join</button>
+        {%- if form.posted_successfully? -%}
+          <p class="footer__ok tagform__msg">You’re on the haus list. Welcome in.</p>
+        {%- elsif form.errors -%}
+          <p class="footer__err tagform__msg">{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</p>
+        {%- endif -%}
+      {%- endform -%}
+    </div>
+
+    <div class="footer__bow" aria-hidden="true">
+      {% render 'ribbon-bow', class: 'footer__ribbon' %}
+      <div class="footer__tag">
+        <span class="footer__tag-hole"></span>
+        <span>WEAR IT.<br>LIVE IN IT.</span>
+        {% render 'wordmark', class: 'footer__tag-mark' %}
+      </div>
+    </div>
+  </div>
+
+  <div class="footer__cols">
+    <div>
+      <p class="t-caps">Rooms</p>
+      {%- for c in section.settings.rooms -%}
+        <a href="{{ c.url }}">{{ c.title }}</a>
+      {%- else -%}
+        <a href="{{ routes.all_products_collection_url }}">Shop all</a>
+      {%- endfor -%}
+    </div>
+    <div>
+      <p class="t-caps">The haus</p>
+      {%- for link in menu.links -%}
+        <a href="{{ link.url }}">{{ link.title }}</a>
+      {%- endfor -%}
+      {%- if shop.customer_accounts_enabled -%}<a href="{{ routes.account_url }}">Account</a>{%- endif -%}
+    </div>
+    <div>
+      <p class="t-caps">Help</p>
+      {%- if section.settings.email != blank -%}<a href="mailto:{{ section.settings.email }}">{{ section.settings.email }}</a>{%- endif -%}
+      {%- if section.settings.whatsapp != blank -%}<a href="https://wa.me/{{ section.settings.whatsapp }}" target="_blank" rel="noopener">WhatsApp us</a>{%- endif -%}
+      {%- for policy in shop.policies -%}<a href="{{ policy.url }}">{{ policy.title }}</a>{%- endfor -%}
+    </div>
+    <div>
+      <p class="t-caps">Follow</p>
+      {%- if section.settings.instagram != blank -%}<a href="https://instagram.com/{{ section.settings.instagram }}" target="_blank" rel="noopener">Instagram</a>{%- endif -%}
+      {%- if section.settings.tiktok != blank -%}<a href="https://tiktok.com/@{{ section.settings.tiktok }}" target="_blank" rel="noopener">TikTok</a>{%- endif -%}
+      <div class="footer__btns">
+        {% render 'button-mark', color: 'var(--cream)', holes: 'var(--night)', class: 'footer__btn' %}
+        {% render 'button-mark', color: 'var(--dusty-blue)', holes: 'var(--night)', class: 'footer__btn' %}
+        {% render 'button-mark', color: 'var(--sage)', holes: 'var(--night)', class: 'footer__btn' %}
+        {% render 'button-mark', color: 'var(--burgundy)', holes: 'var(--night)', class: 'footer__btn' %}
+        {% render 'button-mark', color: 'var(--espresso-soft)', holes: 'var(--night)', class: 'footer__btn' %}
+      </div>
+    </div>
+  </div>
+
+  <div class="footer__giant">
+    {% render 'wordmark', write: true, uid: 'footer' %}
+  </div>
+
+  <div class="footer__base">
+    <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}</span>
+    <span>{{ settings.tagline }}</span>
+    <span>{{ section.settings.base_note }}</span>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The haus list" },
+    { "type": "text", "id": "title", "label": "Title", "default": "come over more often" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "New drops, slow-living notes and first dibs on restocks. No spam — we hate it too." },
+    { "type": "collection_list", "id": "rooms", "label": "Rooms", "limit": 6 },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" },
+    { "type": "text", "id": "email", "label": "Contact email", "default": "hello@innhaus.com" },
+    { "type": "text", "id": "whatsapp", "label": "WhatsApp number (digits only)" },
+    { "type": "text", "id": "instagram", "label": "Instagram handle", "default": "innhaus" },
+    { "type": "text", "id": "tiktok", "label": "TikTok handle", "default": "innhaus" },
+    { "type": "text", "id": "base_note", "label": "Bottom note", "default": "Made in Cairo, for staying in" }
+  ]
+}
+{% endschema %}

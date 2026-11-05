@@ -1,0 +1,38 @@
+{%- comment -%} The cart, as a sage linen pouch tied with a black satin ribbon. Lines are rendered by inhaus.js from /cart.js. {%- endcomment -%}
+<div class="pouch" aria-hidden="true" data-pouch>
+  <div class="pouch__veil" data-pouch-close></div>
+  <aside class="pouch__panel" role="dialog" aria-modal="true" aria-label="Your pouch">
+    <div class="pouch__stitch"></div>
+    {% render 'ribbon-bow', class: 'pouch__ribbon' %}
+    <header class="pouch__head">
+      <p class="t-caps">Your pouch</p>
+      <h2 class="t-display" data-pouch-title>{% if cart.item_count == 0 %}still empty{% else %}{{ cart.item_count }} soft thing{% if cart.item_count != 1 %}s{% endif %}{% endif %}</h2>
+      <button type="button" class="pouch__close ulink" data-pouch-close>Close</button>
+    </header>
+
+    {%- if settings.free_shipping_threshold > 0 -%}
+      <div class="pouch__thread">
+        <p data-pouch-thread-text>&nbsp;</p>
+        <div class="pouch__track">
+          <span data-pouch-thread></span>
+          {% render 'button-mark', color: 'var(--cream)', holes: 'var(--sage-deep)', class: 'pouch__needle' %}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div class="pouch__lines" data-lenis-prevent data-pouch-lines></div>
+
+    <footer class="pouch__foot">
+      <div class="pouch__subtotal">
+        <span>Subtotal</span>
+        <strong data-pouch-subtotal>{{ cart.total_price | money }}</strong>
+      </div>
+      <p class="pouch__note">Taxes included. Delivery calculated at checkout.</p>
+      <form action="{{ routes.cart_url }}" method="post" class="pouch__form">
+        <button type="submit" name="checkout" class="btn btn--cream btn--full" data-pouch-checkout{% if cart.item_count == 0 %} disabled{% endif %}>
+          <span>Checkout</span>
+        </button>
+      </form>
+    </footer>
+  </aside>
+</div>

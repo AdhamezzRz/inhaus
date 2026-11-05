@@ -1,0 +1,50 @@
+<section class="care" id="care" data-header-tone="dark">
+  <div class="section-head">
+    <p class="t-caps">{{ section.settings.label }}</p>
+    <h2 class="t-display">{{ section.settings.title }}</h2>
+  </div>
+  <div class="care__grid">
+    {%- for block in section.blocks -%}
+      <article data-reveal data-delay="{{ forloop.index0 | times: 0.1 }}" {{ block.shopify_attributes }}>
+        <h3>{{ block.settings.title }}</h3>
+        <p>{{ block.settings.text }}</p>
+      </article>
+    {%- endfor -%}
+  </div>
+  {%- if section.settings.show_sizes -%}
+    <div class="sizes" data-reveal>
+      <table>
+        <thead><tr><th>Size</th><th>UK</th><th>Bust (cm)</th><th>Waist (cm)</th><th>Hip (cm)</th></tr></thead>
+        <tbody>
+          <tr><td>XS</td><td>6</td><td>80–84</td><td>60–64</td><td>86–90</td></tr>
+          <tr><td>S</td><td>8</td><td>84–88</td><td>64–68</td><td>90–94</td></tr>
+          <tr><td>M</td><td>10</td><td>88–94</td><td>68–74</td><td>94–100</td></tr>
+          <tr><td>L</td><td>12</td><td>94–100</td><td>74–80</td><td>100–106</td></tr>
+          <tr><td>XL</td><td>14</td><td>100–106</td><td>80–86</td><td>106–112</td></tr>
+        </tbody>
+      </table>
+      <p>{{ section.settings.size_note }}</p>
+    </div>
+  {%- endif -%}
+  <div class="care__cta"><a href="{{ routes.all_products_collection_url }}" class="btn btn--sage"><span>Shop the collection</span></a></div>
+</section>
+
+{% schema %}
+{
+  "name": "Delivery & sizing",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "Good to know" },
+    { "type": "text", "id": "title", "label": "Title", "default": "delivery, exchanges & sizing" },
+    { "type": "checkbox", "id": "show_sizes", "label": "Show size chart", "default": true },
+    { "type": "text", "id": "size_note", "label": "Size note", "default": "Between sizes? Our sets are cut relaxed — take your usual size, or size down for a neater fit." }
+  ],
+  "blocks": [
+    { "type": "card", "name": "Card", "settings": [
+      { "type": "text", "id": "title", "label": "Title", "default": "Delivery" },
+      { "type": "textarea", "id": "text", "label": "Text", "default": "Same-day in Cairo for orders before 1pm. 2–4 working days everywhere else in Egypt." }
+    ] }
+  ],
+  "presets": [{ "name": "Delivery & sizing" }]
+}
+{% endschema %}

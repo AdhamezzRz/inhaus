@@ -1,0 +1,45 @@
+{%- liquid
+  assign words = section.settings.text | split: ' '
+  assign img1 = 'l-fabric.webp' | asset_url
+  assign img2 = 'l-friends.webp' | asset_url
+  assign img3 = 'l-cafe.webp' | asset_url
+  if section.settings.image_1 != blank
+    assign img1 = section.settings.image_1 | image_url: width: 300
+  endif
+  if section.settings.image_2 != blank
+    assign img2 = section.settings.image_2 | image_url: width: 300
+  endif
+  if section.settings.image_3 != blank
+    assign img3 = section.settings.image_3 | image_url: width: 300
+  endif
+-%}
+<section class="manifesto" data-header-tone="dark" data-section-type="manifesto">
+  <p class="t-caps manifesto__label">
+    {% render 'button-mark', color: 'var(--sage)', class: 'manifesto__spin' %}
+    {{ section.settings.label }}
+  </p>
+  <p class="manifesto__text">
+    {%- for w in words -%}
+      <span class="manifesto__w">{{ w }}</span>{{ ' ' }}
+      {%- if forloop.index0 == 5 -%}<span class="manifesto__pill" data-w="1.8" aria-hidden="true"><img src="{{ img1 }}" alt="" loading="lazy" width="300" height="300"></span>{{ ' ' }}{%- endif -%}
+      {%- if forloop.index0 == 13 -%}<span class="manifesto__pill" data-w="2.4" aria-hidden="true"><img src="{{ img2 }}" alt="" loading="lazy" width="300" height="300"></span>{{ ' ' }}{%- endif -%}
+      {%- if forloop.index0 == 22 -%}<span class="manifesto__pill" data-w="1.8" aria-hidden="true"><img src="{{ img3 }}" alt="" loading="lazy" width="300" height="300"></span>{{ ' ' }}{%- endif -%}
+    {%- endfor -%}
+  </p>
+  <p class="manifesto__sign t-display">{{ section.settings.sign }}</p>
+</section>
+
+{% schema %}
+{
+  "name": "Manifesto",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "N° 02 — Made to be lived in" },
+    { "type": "textarea", "id": "text", "label": "Statement", "default": "We make the clothes you live in — for the slow mornings, the friend’s-house evenings and the quick errand in between. Soft enough for the sofa, polished enough for the café on the corner." },
+    { "type": "text", "id": "sign", "label": "Sign-off", "default": "— with love, from the haus" },
+    { "type": "image_picker", "id": "image_1", "label": "Inline photo 1" },
+    { "type": "image_picker", "id": "image_2", "label": "Inline photo 2" },
+    { "type": "image_picker", "id": "image_3", "label": "Inline photo 3" }
+  ],
+  "presets": [{ "name": "Manifesto" }]
+}
+{% endschema %}

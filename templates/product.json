@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "k1": { "type": "perk", "settings": { "text": "Wrapped in our linen pouch" } },
+        "k2": { "type": "perk", "settings": { "text": "Free delivery over EGP 5,000" } },
+        "k3": { "type": "perk", "settings": { "text": "14-day exchanges" } },
+        "a1": { "type": "accordion", "settings": { "title": "Delivery & exchanges", "content": "<p>Delivery in 2–4 working days across Egypt (same-day in Cairo for orders before 1pm). Exchanges within 14 days, unworn and in the pouch.</p>" } }
+      },
+      "block_order": ["k1", "k2", "k3", "a1"],
+      "settings": {}
+    },
+    "related": { "type": "related-products", "settings": {} }
+  },
+  "order": ["main", "related"]
+}

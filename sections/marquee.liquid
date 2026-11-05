@@ -1,0 +1,46 @@
+{%- capture label -%}{%- for block in section.blocks -%}{{ block.settings.text }}{% unless forloop.last %}, {% endunless %}{%- endfor -%}{%- endcapture -%}
+<div class="marquee marquee--{{ section.settings.tone }}" data-section-type="marquee" role="img" aria-label="{{ label | escape }}">
+  <div class="marquee__track" aria-hidden="true">
+    {%- for _ in (1..2) -%}
+      <div class="marquee__row">
+        {%- for block in section.blocks -%}
+          <span class="marquee__item" {{ block.shopify_attributes }}>
+            <span>{{ block.settings.text }}</span>
+            {% render 'button-mark', color: 'currentColor', holes: 'var(--marquee-bg)', ring: 'transparent', class: 'marquee__btn' %}
+          </span>
+        {%- endfor -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Ribbon marquee",
+  "settings": [
+    {
+      "type": "select", "id": "tone", "label": "Colour", "default": "sage",
+      "options": [
+        { "value": "sage", "label": "Sage" },
+        { "value": "burgundy", "label": "Burgundy" },
+        { "value": "blue", "label": "Dusty blue" },
+        { "value": "cream", "label": "Cream" }
+      ]
+    }
+  ],
+  "blocks": [
+    { "type": "phrase", "name": "Phrase", "settings": [{ "type": "text", "id": "text", "label": "Text", "default": "wear it. live in it." }] }
+  ],
+  "presets": [
+    {
+      "name": "Ribbon marquee",
+      "blocks": [
+        { "type": "phrase", "settings": { "text": "wear it. live in it." } },
+        { "type": "phrase", "settings": { "text": "made for slow mornings" } },
+        { "type": "phrase", "settings": { "text": "stay in, on purpose" } },
+        { "type": "phrase", "settings": { "text": "soft things only" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

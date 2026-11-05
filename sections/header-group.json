@@ -1,0 +1,17 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "header": {
+      "type": "header",
+      "blocks": {
+        "a1": { "type": "announcement", "settings": { "text": "Complimentary delivery across Egypt on orders over EGP 5,000", "link": "" } },
+        "a2": { "type": "announcement", "settings": { "text": "Every order arrives wrapped in our signature linen pouch", "link": "" } },
+        "a3": { "type": "announcement", "settings": { "text": "Fall 2026 — the Day In collection is here", "link": "shopify://collections/day-in" } }
+      },
+      "block_order": ["a1", "a2", "a3"],
+      "settings": { "menu": "inhaus-main", "menu_note": "Cairo — shipping across Egypt" }
+    }
+  },
+  "order": ["header"]
+}

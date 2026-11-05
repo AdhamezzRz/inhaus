@@ -1,0 +1,37 @@
+<article class="entry" data-header-tone="dark">
+  <header class="entry__head">
+    <p class="t-caps" data-reveal>
+      {%- if article.tags.size > 0 -%}{{ article.tags.first }} · {% endif -%}
+      {{ article.published_at | date: '%-d %B %Y' }}
+    </p>
+    <h1 class="t-display entry__title" data-split="lines">{{ article.title }}</h1>
+    {%- if article.excerpt != blank -%}<div class="entry__excerpt" data-reveal data-delay="0.2">{{ article.excerpt }}</div>{%- endif -%}
+  </header>
+  {%- if article.image -%}
+    <figure class="entry__cover" data-img-reveal>
+      {{ article.image | image_url: width: 2000 | image_tag: widths: '800,1200,1600,2000', sizes: '90vw', alt: article.image.alt }}
+    </figure>
+  {%- endif -%}
+  <div class="entry__body rte">
+    {{ article.content }}
+    <p class="entry__sign t-display">— {{ article.author | default: 'the haus' | downcase }}</p>
+    <a href="{{ blog.url }}" class="ulink t-caps">← All journal entries</a>
+  </div>
+</article>
+
+{%- assign others = 0 -%}
+<section class="journal-teaser" data-header-tone="dark">
+  <div class="section-head"><p class="t-caps">Keep reading</p></div>
+  <div class="jcards">
+    {%- for a in blog.articles limit: 4 -%}
+      {%- if a.id != article.id and others < 3 -%}
+        {% render 'article-card', article: a, index: others %}
+        {%- assign others = others | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Article" }
+{% endschema %}

@@ -1,0 +1,51 @@
+<section class="cartpage" data-header-tone="dark">
+  <header class="pagehead">
+    <p class="t-caps">Your pouch</p>
+    <h1 class="t-display pagehead__title" data-split="chars">
+      {%- if cart.item_count == 0 -%}still empty{%- else -%}{{ cart.item_count }} soft thing{% if cart.item_count != 1 %}s{% endif %}{%- endif -%}
+    </h1>
+  </header>
+
+  {%- if cart.item_count == 0 -%}
+    <div class="cartpage__empty">
+      <p>Nothing folded in here yet.</p>
+      <a href="{{ routes.all_products_collection_url }}" class="btn btn--sage"><span>Find something soft</span></a>
+    </div>
+  {%- else -%}
+    <form action="{{ routes.cart_url }}" method="post" class="cartpage__form">
+      <div class="cartpage__lines">
+        {%- for item in cart.items -%}
+          <article class="cartpage__line">
+            <a href="{{ item.url }}" class="cartpage__thumb">{{ item.image | image_url: width: 300 | image_tag: alt: item.title | escape }}</a>
+            <div class="cartpage__info">
+              <h2>{{ item.product.title }}</h2>
+              {%- unless item.product.has_only_default_variant -%}<p>{{ item.variant.title }}</p>{%- endunless -%}
+              <label class="qty qty--page">
+                <span class="sr-only">Quantity</span>
+                <input type="number" name="updates[]" value="{{ item.quantity }}" min="0">
+              </label>
+            </div>
+            <div class="cartpage__price">
+              <span>{{ item.final_line_price | money }}</span>
+              <a href="{{ item.url_to_remove }}" class="ulink">Remove</a>
+            </div>
+          </article>
+        {%- endfor -%}
+      </div>
+      <aside class="cartpage__summary">
+        <div class="pouch__subtotal"><span>Subtotal</span><strong>{{ cart.total_price | money }}</strong></div>
+        <p class="pouch__note">Taxes included. Delivery calculated at checkout.</p>
+        <label class="cartpage__note">
+          <span class="t-caps">A note for us (gift message?)</span>
+          <textarea name="note" rows="3">{{ cart.note }}</textarea>
+        </label>
+        <button type="submit" name="update" class="btn btn--ghost btn--full"><span>Update pouch</span></button>
+        <button type="submit" name="checkout" class="btn btn--sage btn--full"><span>Checkout</span></button>
+      </aside>
+    </form>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{ "name": "Cart" }
+{% endschema %}

@@ -1,0 +1,157 @@
+{%- liquid
+  assign current = product.selected_or_first_available_variant
+  assign badge = ''
+  if product.tags contains 'bestseller'
+    assign badge = 'Bestseller'
+  elsif product.tags contains 'new'
+    assign badge = 'New'
+  endif
+  assign swatch = product.metafields.inhaus.color_hex.value | default: '#737B5B'
+  assign colour = product.metafields.inhaus.color_name.value
+  assign subtitle = product.metafields.inhaus.subtitle.value | default: product.type
+  assign details = product.metafields.inhaus.details.value | newline_to_br | split: '<br />'
+  assign room_key = ''
+  for t in product.tags
+    if t contains 'room:'
+      assign room_key = t | remove: 'room:'
+    endif
+  endfor
+  assign room_collection = collections[room_key]
+  assign only_one = product.has_only_default_variant
+  if product.variants.size == 1
+    assign only_one = true
+  endif
+-%}
+<section class="product" data-header-tone="dark" data-section-type="product">
+  <div class="pv" data-product>
+    <div class="pv__gallery">
+      {%- for media in product.media -%}
+        {%- liquid
+          assign load = 'lazy'
+          if forloop.first
+            assign load = 'eager'
+          endif
+        -%}
+        <div class="pv__shot{% if forloop.first %} pv__shot--hero{% endif %}"{% if forloop.first %} data-fly-source{% endif %}>
+          {{ media | image_url: width: 1600 | image_tag: widths: '600,900,1200,1600', sizes: '(max-width: 860px) 86vw, 55vw', alt: media.alt, loading: load }}
+          {%- if forloop.first -%}
+            <div class="pv__hangtag" aria-hidden="true">
+              <span class="pv__hangtag-string"></span>
+              <span class="pv__hangtag-body">WEAR IT.<br>LIVE IN IT.</span>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <aside class="pv__panel">
+      <nav class="pv__crumbs t-caps" aria-label="Breadcrumb">
+        <a href="{{ routes.all_products_collection_url }}">Shop</a>
+        {%- if room_collection != blank -%}<span>/</span><a href="{{ room_collection.url }}">{{ room_collection.title }}</a>{%- endif -%}
+      </nav>
+      {%- if badge != '' -%}<span class="pv__badge">{{ badge }}</span>{%- endif -%}
+      <h1 class="pv__title t-display">{{ product.title }}</h1>
+      <p class="pv__sub t-caps">{{ subtitle }}</p>
+      <p class="pv__price">
+        <span data-price>{{ current.price | money_without_trailing_zeros }}</span>
+        {%- if current.compare_at_price > current.price -%}<s>{{ current.compare_at_price | money_without_trailing_zeros }}</s>{%- endif -%}
+      </p>
+      <div class="pv__desc rte">{{ product.description }}</div>
+
+      {%- if colour != blank -%}
+        <div class="pv__colour">
+          {% render 'button-mark', color: swatch, class: 'pv__btn' %}
+          <span><small class="t-caps">Colour</small>{{ colour }}</span>
+        </div>
+      {%- endif -%}
+
+      {%- form 'product', product, class: 'pv__form', data-product-form: '' -%}
+        <input type="hidden" name="id" value="{{ current.id }}" data-variant-input>
+        {%- unless only_one -%}
+          <div class="pv__sizes" role="radiogroup" aria-label="{{ product.options.first }}">
+            <div class="pv__sizes-head">
+              <small class="t-caps">{{ product.options.first }}</small>
+              {%- if pages['the-haus'].url -%}<a href="{{ pages['the-haus'].url }}#care" class="ulink t-caps">Size guide</a>{%- endif -%}
+            </div>
+            <div class="pv__size-row">
+              {%- for v in product.variants -%}
+                <button
+                  type="button"
+                  role="radio"
+                  aria-checked="false"
+                  class="sizetag{% unless v.available %} is-out{% endunless %}"
+                  data-variant="{{ v.id }}"
+                  data-available="{{ v.available }}"
+                  data-variant-price="{{ v.price | money_without_trailing_zeros | escape }}"
+                ><i aria-hidden="true"></i>{{ v.title }}</button>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endunless -%}
+
+        <button type="submit" class="btn btn--sage btn--full pv__add" data-add{% unless product.available %} disabled{% endunless %} data-needs-size="{% if only_one %}no{% else %}yes{% endif %}">
+          <span data-add-label>
+            {%- if product.available == false -%}Sold out{%- elsif only_one -%}Add to pouch — {{ current.price | money_without_trailing_zeros }}{%- else -%}Choose your size{%- endif -%}
+          </span>
+        </button>
+      {%- endform -%}
+
+      <ul class="pv__perks">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'perk' -%}<li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>{%- endif -%}
+        {%- endfor -%}
+      </ul>
+
+      <div class="pv__accs">
+        {%- if details.size > 0 and product.metafields.inhaus.details != blank -%}
+          <div class="acc is-open">
+            <button type="button" class="acc__head" aria-expanded="true"><span>The details</span><i aria-hidden="true"></i></button>
+            <div class="acc__body"><div class="acc__inner"><ul>{%- for d in details -%}<li>{{ d | strip }}</li>{%- endfor -%}</ul></div></div>
+          </div>
+        {%- endif -%}
+        {%- if product.metafields.inhaus.fabric != blank or product.metafields.inhaus.care != blank -%}
+          <div class="acc">
+            <button type="button" class="acc__head" aria-expanded="false"><span>Fabric &amp; care</span><i aria-hidden="true"></i></button>
+            <div class="acc__body" style="height:0"><div class="acc__inner"><p>{{ product.metafields.inhaus.fabric.value }}</p><p>{{ product.metafields.inhaus.care.value }}</p></div></div>
+          </div>
+        {%- endif -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'accordion' -%}
+            <div class="acc" {{ block.shopify_attributes }}>
+              <button type="button" class="acc__head" aria-expanded="false"><span>{{ block.settings.title }}</span><i aria-hidden="true"></i></button>
+              <div class="acc__body" style="height:0"><div class="acc__inner rte">{{ block.settings.content }}</div></div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </aside>
+
+    <div class="pv__mobilebar">
+      <span><b>{{ product.title }}</b><span data-price>{{ current.price | money_without_trailing_zeros }}</span></span>
+      <button type="button" class="btn btn--sage" data-mobile-add><span>{% if only_one %}Add to pouch{% else %}Pick a size{% endif %}</span></button>
+    </div>
+  </div>
+
+  <script type="application/json" data-product-json>
+    {
+      "title": {{ product.title | json }},
+      "handle": {{ product.handle | json }},
+      "colour": {{ colour | json }},
+      "image": {{ product.featured_media | image_url: width: 400 | json }},
+      "onlyOne": {{ only_one | json }}
+    }
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Product",
+  "blocks": [
+    { "type": "perk", "name": "Perk", "settings": [{ "type": "text", "id": "text", "label": "Text", "default": "Wrapped in our linen pouch" }] },
+    { "type": "accordion", "name": "Accordion", "settings": [
+      { "type": "text", "id": "title", "label": "Title", "default": "Delivery & exchanges" },
+      { "type": "richtext", "id": "content", "label": "Content", "default": "<p>Delivery in 2–4 working days across Egypt. Exchanges within 14 days, unworn and in the pouch.</p>" }
+    ] }
+  ]
+}
+{% endschema %}

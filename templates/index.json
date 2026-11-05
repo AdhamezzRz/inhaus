@@ -1,0 +1,59 @@
+{
+  "sections": {
+    "hero": { "type": "hero-window", "settings": { "eyebrow": "Fall 2026 — Loungewear for living in", "eyebrow_right": "N° 01 — The Day In edit", "title": "wear it. live in it.", "caption": "Come in. Stay a while.", "cue": "Scroll to step inside" } },
+    "manifesto": { "type": "manifesto", "settings": { "label": "N° 02 — Made to be lived in", "sign": "— with love, from the haus" } },
+    "ribbon": {
+      "type": "marquee",
+      "blocks": { "m1": { "type": "phrase", "settings": { "text": "wear it. live in it." } }, "m2": { "type": "phrase", "settings": { "text": "made for slow mornings" } }, "m3": { "type": "phrase", "settings": { "text": "stay in, on purpose" } }, "m4": { "type": "phrase", "settings": { "text": "soft things only" } } },
+      "block_order": ["m1", "m2", "m3", "m4"],
+      "settings": { "tone": "sage" }
+    },
+    "line": { "type": "clothesline", "settings": { "limit": 12, "skip_little_things": true } },
+    "rooms": {
+      "type": "rooms",
+      "blocks": {
+        "r1": { "type": "room", "settings": { "collection": "day-in", "name": "Day In", "line": "Curtains half open. Nowhere to be.", "description": "Pinstripe poplin, waffle robes and ribbed sets for the slow mornings that turn into slow afternoons.", "fallback": "l-stretch.webp", "tint": "burgundy" } },
+        "r2": { "type": "room", "settings": { "collection": "friends-house", "name": "Friend’s House", "line": "Strawberries, old films, one more episode.", "description": "Matching sets and soft knits made for sleepovers, sofa forts and the conversations that last till 2am.", "fallback": "l-friends.webp", "tint": "sage" } },
+        "r3": { "type": "room", "settings": { "collection": "quick-errand", "name": "Quick Errand", "line": "Matcha run. Back before it cools.", "description": "Pieces polished enough for the café on the corner, and soft enough to come straight back to the sofa.", "fallback": "l-cafe.webp", "tint": "blue" } }
+      },
+      "block_order": ["r1", "r2", "r3"],
+      "settings": {}
+    },
+    "fabric": {
+      "type": "fabric-touch",
+      "blocks": { "f1": { "type": "fact", "settings": { "value": "120", "label": "gsm poplin" } }, "f2": { "type": "fact", "settings": { "value": "100%", "label": "long-staple cotton" } }, "f3": { "type": "fact", "settings": { "value": "∞", "label": "washes softer" } } },
+      "block_order": ["f1", "f2", "f3"],
+      "settings": {}
+    },
+    "diary": {
+      "type": "polaroid-wall",
+      "blocks": {
+        "p1": { "type": "polaroid", "settings": { "fallback": "l-cafe.webp", "caption": "quick errand", "frame": "burgundy" } },
+        "p2": { "type": "polaroid", "settings": { "fallback": "l-friends.webp", "caption": "friend’s house", "frame": "sage" } },
+        "p3": { "type": "polaroid", "settings": { "fallback": "l-stretch.webp", "caption": "day in", "frame": "blue" } },
+        "p4": { "type": "polaroid", "settings": { "fallback": "l-reading.webp", "caption": "chapter eleven", "frame": "cream" } },
+        "p5": { "type": "polaroid", "settings": { "fallback": "l-bordeaux.webp", "caption": "stayed in on purpose", "frame": "blue" } },
+        "p6": { "type": "polaroid", "settings": { "fallback": "l-kitchen.webp", "caption": "sunday, 9am", "frame": "sage" } },
+        "p7": { "type": "polaroid", "settings": { "fallback": "p-boxers.webp", "caption": "the good pyjamas", "frame": "cream" } },
+        "p8": { "type": "polaroid", "settings": { "fallback": "l-packaging.webp", "caption": "wrapped like a gift", "frame": "burgundy" } },
+        "p9": { "type": "polaroid", "settings": { "fallback": "p-socks.webp", "caption": "slouched, always", "frame": "sage" } }
+      },
+      "block_order": ["p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8", "p9"],
+      "settings": {}
+    },
+    "ribbon_2": {
+      "type": "marquee",
+      "blocks": { "n1": { "type": "phrase", "settings": { "text": "quick errand" } }, "n2": { "type": "phrase", "settings": { "text": "friend’s house" } }, "n3": { "type": "phrase", "settings": { "text": "day in" } }, "n4": { "type": "phrase", "settings": { "text": "little things" } } },
+      "block_order": ["n1", "n2", "n3", "n4"],
+      "settings": { "tone": "burgundy" }
+    },
+    "unboxing": {
+      "type": "packaging",
+      "blocks": { "s1": { "type": "step", "settings": { "text": "Folded by hand" } }, "s2": { "type": "step", "settings": { "text": "Tucked in sage linen" } }, "s3": { "type": "step", "settings": { "text": "Tied with black satin" } }, "s4": { "type": "step", "settings": { "text": "Signed, with a thank you" } } },
+      "block_order": ["s1", "s2", "s3", "s4"],
+      "settings": {}
+    },
+    "journal": { "type": "journal-teaser", "settings": { "blog": "journal" } }
+  },
+  "order": ["hero", "manifesto", "ribbon", "line", "rooms", "fabric", "diary", "ribbon_2", "unboxing", "journal"]
+}
