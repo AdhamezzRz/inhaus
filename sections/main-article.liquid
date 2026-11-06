@@ -4,11 +4,11 @@
       {%- if article.tags.size > 0 -%}{{ article.tags.first }} · {% endif -%}
       {{ article.published_at | date: '%-d %B %Y' }}
     </p>
-    <h1 class="t-display entry__title" data-split="lines">{{ article.title }}</h1>
+    <h1 class="t-display entry__title" data-reveal>{{ article.title }}</h1>
     {%- if article.excerpt != blank -%}<div class="entry__excerpt" data-reveal data-delay="0.2">{{ article.excerpt }}</div>{%- endif -%}
   </header>
   {%- if article.image -%}
-    <figure class="entry__cover" data-img-reveal>
+    <figure class="entry__cover">
       {{ article.image | image_url: width: 2000 | image_tag: widths: '800,1200,1600,2000', sizes: '90vw', alt: article.image.alt }}
     </figure>
   {%- endif -%}

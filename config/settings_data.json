@@ -2,12 +2,6 @@
   "current": {
     "tagline": "Wear it. Live in it.",
     "show_preloader": true,
-    "preloader_left": "INN HAUS",
-    "preloader_season": "Fall 2026",
-    "show_cursor": true,
-    "show_lamp_cord": true,
-    "page_curtains": true,
-    "smooth_scroll": true,
     "free_shipping_threshold": 5000
   },
   "presets": {

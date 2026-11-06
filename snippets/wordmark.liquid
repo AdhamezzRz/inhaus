@@ -1,14 +1,15 @@
 {%- comment -%}
   The wordmark. Pass write: true to add the pen mask that writes it stroke by stroke
-  (animate .wordmark__pen path with DrawSVG). Pass a unique uid when write is true.
+  (the .wordmark__pen paths use pathLength="1"; animate stroke-dashoffset 1 → 0).
+  Pass a unique uid when write is true.
   Usage: {% render "wordmark", write: true, uid: "footer", class: "footer__mark" %}
 {%- endcomment -%}
 {%- assign mask_id = "wm-" | append: uid -%}
-<svg class="wordmark{% if write %} wordmark--write{% endif %} {{ class }}" viewBox="0 0 900 447" role="img" aria-label="inn haus" fill="currentColor">
+<svg class="wordmark{% if write %} wordmark--write{% endif %} {{ class }}" viewBox="0 0 900 463" role="img" aria-label="inn haus" fill="currentColor">
   {%- if write -%}
-    <defs><mask id="{{ mask_id }}" maskUnits="userSpaceOnUse" x="0" y="0" width="900" height="447"><g class="wordmark__pen" fill="none" stroke="#fff" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"><path d="M 122 62 L 156 26 M 106 96 L 34 250 L 60 245 L 120 190 L 175 140 L 226 92 L 214 110 L 180 188 L 222 136 L 285 80 L 280 110 L 276 140 L 292 152 L 340 125 L 372 90 L 400 60 L 395 72 L 348 145 L 380 110 L 430 62 L 466 38 L 452 80 L 438 125 L 448 145 L 470 148 C 560 120, 700 60, 875 28"/><path d="M 252 168 L 100 422 M 140 368 L 190 320 L 244 280 L 236 320 L 220 372 L 226 395 L 244 396 L 300 350 L 340 300 L 382 262 L 360 300 L 310 360 L 305 372 L 322 368 L 362 330 L 410 268 L 398 300 L 386 350 L 396 368 L 450 320 L 500 255 L 480 300 L 462 340 L 474 346 L 520 300 L 562 248 L 545 290 L 534 340 L 546 350 L 600 310 L 650 240 L 716 192 L 680 230 L 655 265 L 668 285 L 690 300 L 700 330 L 680 360 L 640 395 L 600 415 L 600 400 L 650 345 L 680 320"/></g></mask></defs>
-    <g mask="url(#{{ mask_id }})"><use href="#ih-logo" width="900" height="447"/></g>
+    <defs><mask id="{{ mask_id }}" maskUnits="userSpaceOnUse" x="0" y="0" width="900" height="463"><g class="wordmark__pen" fill="none" stroke="#fff" stroke-width="38" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M 118 52 L 152 18 M 96 92 L 21 255 L 40 252 L 100 190 L 160 135 L 222 82 L 206 104 L 172 182 L 214 127 L 280 75 L 274 98 L 276 140 L 292 148 L 334 120 L 372 62 L 367 88 L 335 146 L 372 98 L 412 58 L 456 30 L 442 58 L 424 112 L 432 140 L 450 150 C 560 130, 700 72, 886 31"/><path pathLength="1" d="M 248 168 L 82 442 M 130 372 L 186 318 L 236 282 L 230 312 L 212 375 L 214 404 L 232 410 L 270 380 L 302 346 L 330 308 L 352 282 L 386 268 L 402 290 L 376 318 L 340 352 L 312 376 L 304 382 L 330 372 L 378 326 L 416 280 L 400 318 L 382 356 L 396 382 L 420 362 L 460 320 L 502 276 L 510 268 L 498 292 L 478 332 L 474 352 L 484 358 L 522 322 L 570 265 L 556 300 L 540 344 L 552 366 L 590 346 L 630 304 L 652 278 L 676 234 L 720 198 L 700 212 L 676 244 L 670 270 L 690 296 L 720 316 L 728 336 L 712 376 L 676 412 L 640 436 L 614 444 L 610 428 L 640 388 L 690 352 L 712 340"/></g></mask></defs>
+    <g mask="url(#{{ mask_id }})"><use href="#ih-logo" width="900" height="463"/></g>
   {%- else -%}
-    <use href="#ih-logo" width="900" height="447"/>
+    <use href="#ih-logo" width="900" height="463"/>
   {%- endif -%}
 </svg>

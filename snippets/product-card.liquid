@@ -33,7 +33,7 @@
   assign alt_media = product.media[1]
 -%}
 <article class="pcard" data-room="{{ room_key }}" data-price="{{ product.price }}" data-flip-id="{{ product.handle }}" style="--i: {{ index | default: 0 }}">
-  <a href="{{ product.url }}" class="pcard__link" data-cursor="view">
+  <a href="{{ product.url }}" class="pcard__link">
     <span class="pcard__frame">
       {%- if product.featured_media -%}
         {{ product.featured_media | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '360,540,720,1000', sizes: '(max-width: 560px) 50vw, (max-width: 1100px) 50vw, 33vw', alt: product.featured_media.alt, class: 'pcard__img' }}

@@ -1,7 +1,7 @@
 <section class="journal" data-header-tone="dark">
   <header class="pagehead">
     <p class="t-caps" data-reveal>{{ section.settings.eyebrow }}</p>
-    <h1 class="t-display pagehead__title" data-split="chars">{{ blog.title | downcase }}</h1>
+    <h1 class="t-display pagehead__title" data-reveal>{{ blog.title | downcase }}</h1>
     <p class="pagehead__lede" data-reveal data-delay="0.2">{{ section.settings.lede }}</p>
   </header>
   {%- paginate blog.articles by 12 -%}

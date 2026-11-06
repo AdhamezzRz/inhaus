@@ -4,9 +4,9 @@
     assign photo = section.settings.image | image_url: width: 800
   endif
 -%}
-<section class="pack" data-header-tone="dark" data-section-type="packaging" id="packaging">
+<section class="pack" data-header-tone="dark" id="packaging">
   <div class="pack__pin">
-    <div class="pack__copy">
+    <div class="pack__copy" data-reveal>
       <p class="t-caps">{{ section.settings.label }}</p>
       <h2 class="t-display">{{ section.settings.title }}</h2>
       <p>{{ section.settings.text }}</p>
@@ -17,7 +17,7 @@
       </ol>
     </div>
 
-    <svg class="pack__scene" viewBox="0 0 600 640" aria-hidden="true">
+    <svg class="pack__scene" viewBox="0 0 600 640" aria-hidden="true" data-reveal data-delay="0.15">
       <defs>
         <pattern id="linen-{{ section.id }}" width="6" height="6" patternUnits="userSpaceOnUse">
           <rect width="6" height="6" fill="#737B5B"/>
@@ -28,12 +28,12 @@
         <path d="M170 120 q15 -14 30 0 q15 -14 30 0 q15 -14 30 0 q15 -14 30 0 q15 -14 30 0 q15 -14 30 0 q15 -14 30 0 q15 -14 30 0 V330 q-15 14 -30 0 q-15 14 -30 0 q-15 14 -30 0 q-15 14 -30 0 q-15 14 -30 0 q-15 14 -30 0 q-15 14 -30 0 q-15 14 -30 0 Z" fill="#F3F0E9" stroke="#E2DACB"/>
         <text x="290" y="190" text-anchor="middle" class="pk-card__title">THANK YOU</text>
         <text x="290" y="212" text-anchor="middle" class="pk-card__sub">WE HOPE YOU LOVE YOUR ORDER</text>
-        <g transform="translate(232 232) scale(0.13)" fill="#737B5B"><use href="#ih-logo" width="900" height="447"/></g>
+        <g transform="translate(232 232) scale(0.13)" fill="#737B5B"><use href="#ih-logo" width="900" height="463"/></g>
       </g>
       <g class="pk-pouch">
         <rect x="110" y="250" width="380" height="330" rx="10" fill="url(#linen-{{ section.id }})"/>
         <rect x="124" y="264" width="352" height="302" rx="6" fill="none" stroke="#C9CDB6" stroke-dasharray="6 6" stroke-width="1.4"/>
-        <g transform="translate(240 470) scale(0.135)" fill="#E9E6D8" opacity="0.9"><use href="#ih-logo" width="900" height="447"/></g>
+        <g transform="translate(240 470) scale(0.135)" fill="#E9E6D8" opacity="0.9"><use href="#ih-logo" width="900" height="463"/></g>
         <text x="300" y="548" text-anchor="middle" class="pk-pouch__tag">WEAR IT. LIVE IN IT.</text>
       </g>
       <path class="pk-flap" d="M110 250 H490 V330 Q300 372 110 330 Z" fill="#6A7253"/>
@@ -51,12 +51,12 @@
           <circle cx="41" cy="14" r="5" fill="#E2DACB"/>
           <text x="41" y="56" text-anchor="middle" class="pk-tag__text">WEAR IT.</text>
           <text x="41" y="72" text-anchor="middle" class="pk-tag__text">LIVE IN IT.</text>
-          <g transform="translate(16 84) scale(0.056)" fill="#A9A08F"><use href="#ih-logo" width="900" height="447"/></g>
+          <g transform="translate(16 84) scale(0.056)" fill="#A9A08F"><use href="#ih-logo" width="900" height="463"/></g>
         </g>
       </g>
     </svg>
 
-    <figure class="pack__photo" data-parallax="0.25">
+    <figure class="pack__photo">
       <img src="{{ photo }}" alt="Sage linen pouches tied with black satin ribbon" loading="lazy" width="896" height="1120">
     </figure>
   </div>
@@ -67,7 +67,7 @@
   "name": "Unboxing",
   "max_blocks": 6,
   "settings": [
-    { "type": "text", "id": "label", "label": "Label", "default": "N° 07 — The unboxing" },
+    { "type": "text", "id": "label", "label": "Label", "default": "N° 06 — The unboxing" },
     { "type": "text", "id": "title", "label": "Title", "default": "wrapped like a gift" },
     { "type": "textarea", "id": "text", "label": "Text", "default": "Every order is folded by hand, tucked into a sage linen pouch, tied with a black satin ribbon and finished with a hand-written thank you card. The pouch is yours to keep." },
     { "type": "image_picker", "id": "image", "label": "Photo" }

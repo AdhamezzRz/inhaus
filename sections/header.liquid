@@ -59,7 +59,7 @@
           endif
         -%}
         <li class="menu__item">
-          <a href="{{ link.url }}" class="menu__link">
+          <a href="{{ link.url }}" class="menu__link" style="--i: {{ forloop.index0 }}">
             <small>{{ forloop.index | prepend: '0' | slice: -2, 2 }}</small>
             <span>{{ link.title }}</span>
             {%- if peek -%}{{ peek | image_url: width: 400 | image_tag: class: 'menu__peek', alt: '', loading: 'lazy' }}{%- endif -%}

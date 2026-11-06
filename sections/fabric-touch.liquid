@@ -1,16 +1,14 @@
-{%- liquid
-  assign texture = 'l-fabric.webp' | asset_url
-  if section.settings.image != blank
-    assign texture = section.settings.image | image_url: width: 1600
-  endif
--%}
-<section class="fabric" data-header-tone="light" data-section-type="fabric">
-  <div class="fabric__canvas" data-cursor="touch" data-texture="{{ texture }}">
-    <img src="{{ texture }}" alt="{{ section.settings.alt | escape }}" class="fabric__fallback" loading="lazy" width="1024" height="1024">
-  </div>
-  <div class="fabric__copy">
+<section class="fabric" data-header-tone="dark">
+  <figure class="fabric__img">
+    {%- if section.settings.image != blank -%}
+      {{ section.settings.image | image_url: width: 2000 | image_tag: loading: 'lazy', widths: '800,1200,1600,2000', sizes: '100vw', alt: section.settings.alt }}
+    {%- else -%}
+      <img src="{{ 'l-fabric.webp' | asset_url }}" alt="{{ section.settings.alt | escape }}" loading="lazy" width="1024" height="1024">
+    {%- endif -%}
+  </figure>
+  <div class="fabric__copy" data-reveal>
     <p class="t-caps">{{ section.settings.label }}</p>
-    <h2 class="t-display" data-split="chars">{{ section.settings.title }}</h2>
+    <h2 class="t-display">{{ section.settings.title }}</h2>
     <p>{{ section.settings.text }}</p>
     <ul class="fabric__facts">
       {%- for block in section.blocks -%}
@@ -22,12 +20,12 @@
 
 {% schema %}
 {
-  "name": "Fabric you can touch",
+  "name": "Fabric story",
   "max_blocks": 4,
   "settings": [
     { "type": "image_picker", "id": "image", "label": "Fabric close-up" },
     { "type": "text", "id": "alt", "label": "Image description", "default": "Close-up of sage and cream pinstripe cotton poplin" },
-    { "type": "text", "id": "label", "label": "Label", "default": "N° 05 — Go on, touch it" },
+    { "type": "text", "id": "label", "label": "Label", "default": "N° 04 — The cloth" },
     { "type": "text", "id": "title", "label": "Title", "default": "feel the poplin" },
     { "type": "textarea", "id": "text", "label": "Text", "default": "Long-staple cotton, woven tight and brushed soft — it gets better every single wash." }
   ],
@@ -37,7 +35,7 @@
       { "type": "text", "id": "label", "label": "Label", "default": "gsm poplin" }
     ] }
   ],
-  "presets": [{ "name": "Fabric you can touch", "blocks": [
+  "presets": [{ "name": "Fabric story", "blocks": [
     { "type": "fact", "settings": { "value": "120", "label": "gsm poplin" } },
     { "type": "fact", "settings": { "value": "100%", "label": "long-staple cotton" } },
     { "type": "fact", "settings": { "value": "∞", "label": "washes softer" } }

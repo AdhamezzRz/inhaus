@@ -2,7 +2,6 @@
 <html lang="{{ request.locale.iso_code }}" data-theme="day"{% if request.design_mode %} data-design-mode{% endif %}>
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="theme-color" content="#F7F6F1">
     <link rel="canonical" href="{{ canonical_url }}">
@@ -22,28 +21,27 @@
     {% render 'meta-tags' %}
 
     {{ 'ih-bodoni-italic.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
-    {{ 'ih-archivo.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
     <style>
       @font-face { font-family: 'IH Bodoni'; src: url({{ 'ih-bodoni.woff2' | asset_url }}) format('woff2'); font-weight: 400 900; font-style: normal; font-display: swap; }
       @font-face { font-family: 'IH Bodoni'; src: url({{ 'ih-bodoni-italic.woff2' | asset_url }}) format('woff2'); font-weight: 400 900; font-style: italic; font-display: swap; }
       @font-face { font-family: 'IH Archivo'; src: url({{ 'ih-archivo.woff2' | asset_url }}) format('woff2'); font-weight: 400; font-display: swap; }
-      @font-face { font-family: 'IH Archivo Narrow'; src: url({{ 'ih-archivo-narrow-400.woff2' | asset_url }}) format('woff2'); font-weight: 400; font-display: swap; }
-      @font-face { font-family: 'IH Archivo Narrow'; src: url({{ 'ih-archivo-narrow-500.woff2' | asset_url }}) format('woff2'); font-weight: 500; font-display: swap; }
-      :root { --monogram: url({{ 'monogram.svg' | asset_url }}); }
+      @font-face { font-family: 'IH Archivo Narrow'; src: url({{ 'ih-archivo-narrow-500.woff2' | asset_url }}) format('woff2'); font-weight: 400 500; font-display: swap; }
     </style>
     <script>
       try {
         var d = document.documentElement;
         var t = localStorage.getItem('innhaus-theme');
         if (t) d.dataset.theme = t;
+        d.classList.add('js');
         var calm = matchMedia('(prefers-reduced-motion: reduce)').matches || d.hasAttribute('data-design-mode');
         {%- if settings.show_preloader %}
-        if (!calm && sessionStorage.getItem('innhaus-intro-seen') !== '1') d.classList.add('is-loading');
+        if (!calm && sessionStorage.getItem('innhaus-intro-seen') !== '1') {
+          d.classList.add('is-loading');
+          sessionStorage.setItem('innhaus-intro-seen', '1');
+          // The intro is pure CSS; this is only a safety net if scripts never arrive.
+          setTimeout(function () { d.classList.remove('is-loading'); }, 3200);
+        }
         {%- endif %}
-        if (!calm && !d.classList.contains('is-loading') && sessionStorage.getItem('innhaus-curtain') === '1') d.classList.add('is-arriving');
-        sessionStorage.removeItem('innhaus-curtain');
-        // Safety net: never leave the page locked behind the intro or the curtains.
-        setTimeout(function () { d.classList.remove('is-loading', 'is-arriving'); d.style.overflow = ''; }, 6500);
       } catch (e) {}
     </script>
 
@@ -57,29 +55,12 @@
 
     {%- if settings.show_preloader -%}
       <div class="preloader" aria-hidden="true">
-        <div class="preloader__pattern"></div>
-        <div class="preloader__meta"><span>{{ settings.preloader_left }}</span><span>{{ settings.preloader_season }}</span></div>
         <div class="preloader__mark">
           {% render 'wordmark', write: true, uid: 'preloader', class: 'preloader__logo' %}
-          <svg class="preloader__nibs" viewBox="0 0 900 447" aria-hidden="true">
-            {% render 'pen-guides' %}
-            <circle class="preloader__nib" r="0" cx="0" cy="0"/>
-          </svg>
         </div>
-        <p class="preloader__tag">
-          {%- assign chars = settings.tagline | upcase | split: '' -%}
-          {%- for c in chars -%}<span>{% if c == ' ' %}&nbsp;{% else %}{{ c }}{% endif %}</span>{%- endfor -%}
-        </p>
-        <div class="preloader__count">000</div>
-        <button type="button" class="preloader__skip">Skip</button>
+        <p class="preloader__tag">{{ settings.tagline | upcase }}</p>
       </div>
     {%- endif -%}
-
-    <div class="curtain" aria-hidden="true">
-      <div class="curtain__panel curtain__panel--l">{% for i in (1..7) %}<span class="curtain__fold"></span>{% endfor %}</div>
-      <div class="curtain__panel curtain__panel--r">{% for i in (1..7) %}<span class="curtain__fold"></span>{% endfor %}</div>
-      <div class="curtain__mark">{% render 'wordmark', write: true, uid: 'curtain', class: 'curtain__logo' %}</div>
-    </div>
 
     {% sections 'header-group' %}
 
@@ -91,48 +72,18 @@
 
     {% render 'cart-drawer' %}
 
-    {%- if settings.show_lamp_cord -%}
-      <div class="lampcord" data-cursor="pull">
-        <svg class="lampcord__svg" width="40" height="260" viewBox="0 0 40 260" aria-hidden="true"><line x1="20" y1="0" x2="20" y2="120"/></svg>
-        <button class="lampcord__tag" type="button" aria-label="Pull to switch the lights">
-          <svg viewBox="0 0 40 44" aria-hidden="true">
-            <path d="M20 42 C 9 33, 2 26, 2 16 A 9.5 9.5 0 0 1 20 10 A 9.5 9.5 0 0 1 38 16 C 38 26, 31 33, 20 42 Z"/>
-            <circle cx="20" cy="7" r="2.2" class="lampcord__hole"/>
-            <text x="20" y="27" text-anchor="middle">ih</text>
-          </svg>
-        </button>
-      </div>
-    {%- endif -%}
-
-    {%- if settings.show_cursor -%}
-      <div class="cursor" aria-hidden="true"><div class="cursor__btn"><i></i><i></i><i></i><i></i></div><span class="cursor__label"></span></div>
-    {%- endif -%}
-    <div class="grain" aria-hidden="true"></div>
-
     <script>
       window.InnHaus = {
         routes: {
-          cart: {{ routes.cart_url | json }},
           cartAdd: {{ routes.cart_add_url | append: '.js' | json }},
           cartChange: {{ routes.cart_change_url | append: '.js' | json }},
           cartJs: {{ routes.cart_url | append: '.js' | json }},
-          root: {{ routes.root_url | json }}
+          shopAll: {{ routes.all_products_collection_url | json }}
         },
         moneyFormat: {{ shop.money_format | json }},
-        currency: {{ cart.currency.iso_code | json }},
-        freeShipping: {{ settings.free_shipping_threshold | default: 0 | times: 100 }},
-        curtains: {{ settings.page_curtains | json }},
-        smooth: {{ settings.smooth_scroll | json }},
-        designMode: {{ request.design_mode | json }}
+        freeShipping: {{ settings.free_shipping_threshold | default: 0 | times: 100 }}
       };
     </script>
-    <script src="{{ 'vendor-gsap.min.js' | asset_url }}" defer></script>
-    <script src="{{ 'vendor-ScrollTrigger.min.js' | asset_url }}" defer></script>
-    <script src="{{ 'vendor-SplitText.min.js' | asset_url }}" defer></script>
-    <script src="{{ 'vendor-DrawSVGPlugin.min.js' | asset_url }}" defer></script>
-    <script src="{{ 'vendor-Draggable.min.js' | asset_url }}" defer></script>
-    <script src="{{ 'vendor-CustomEase.min.js' | asset_url }}" defer></script>
-    <script src="{{ 'vendor-lenis.min.js' | asset_url }}" defer></script>
     <script src="{{ 'inhaus.js' | asset_url }}" defer></script>
   </body>
 </html>

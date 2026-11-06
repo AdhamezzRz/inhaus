@@ -13,7 +13,7 @@
     assign img3 = section.settings.image_3 | image_url: width: 300
   endif
 -%}
-<section class="manifesto" data-header-tone="dark" data-section-type="manifesto">
+<section class="manifesto" data-header-tone="dark" data-reveal>
   <p class="t-caps manifesto__label">
     {% render 'button-mark', color: 'var(--sage)', class: 'manifesto__spin' %}
     {{ section.settings.label }}
@@ -33,7 +33,7 @@
 {
   "name": "Manifesto",
   "settings": [
-    { "type": "text", "id": "label", "label": "Label", "default": "N° 02 — Made to be lived in" },
+    { "type": "text", "id": "label", "label": "Label", "default": "A note from the haus" },
     { "type": "textarea", "id": "text", "label": "Statement", "default": "We make the clothes you live in — for the slow mornings, the friend’s-house evenings and the quick errand in between. Soft enough for the sofa, polished enough for the café on the corner." },
     { "type": "text", "id": "sign", "label": "Sign-off", "default": "— with love, from the haus" },
     { "type": "image_picker", "id": "image_1", "label": "Inline photo 1" },

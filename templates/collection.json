@@ -1,12 +1,18 @@
 {
   "sections": {
-    "main": { "type": "main-collection", "settings": { "rooms": ["day-in", "friends-house", "quick-errand", "little-things"] } },
-    "ribbon": {
-      "type": "marquee",
-      "blocks": { "m1": { "type": "phrase", "settings": { "text": "complimentary delivery over EGP 5,000" } }, "m2": { "type": "phrase", "settings": { "text": "wrapped in linen" } }, "m3": { "type": "phrase", "settings": { "text": "exchanges within 14 days" } }, "m4": { "type": "phrase", "settings": { "text": "made to be lived in" } } },
-      "block_order": ["m1", "m2", "m3", "m4"],
-      "settings": { "tone": "blue" }
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "rooms": [
+          "day-in",
+          "friends-house",
+          "quick-errand",
+          "little-things"
+        ]
+      }
     }
   },
-  "order": ["main", "ribbon"]
+  "order": [
+    "main"
+  ]
 }

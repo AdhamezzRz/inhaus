@@ -1,51 +1,24 @@
-<section class="rooms" data-header-tone="dark" data-section-type="rooms" id="rooms">
-  <div class="rooms__head">
+<section class="rooms" data-header-tone="dark" id="rooms">
+  <div class="section-head" data-reveal>
     <p class="t-caps">{{ section.settings.label }}</p>
-    <h2 class="t-display" data-split="lines">{{ section.settings.title }}</h2>
+    <h2 class="t-display">{{ section.settings.title }}</h2>
   </div>
-
-  <div class="rooms__grid">
-    <div class="rooms__sticky">
-      <div class="rooms__visual">
-        {%- for block in section.blocks -%}
+  <div class="rooms__row">
+    {%- for block in section.blocks -%}
+      {%- assign c = block.settings.collection -%}
+      <a href="{{ c.url | default: routes.all_products_collection_url }}" class="room" data-reveal data-delay="{{ forloop.index0 | times: 0.12 }}" {{ block.shopify_attributes }}>
+        <span class="room__arch">
           {%- if block.settings.image != blank -%}
-            {{ block.settings.image | image_url: width: 1200 | image_tag: class: 'rooms__img', loading: 'lazy', widths: '600,900,1200', sizes: '45vw', alt: '' }}
+            {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '450,700,900', sizes: '(max-width: 860px) 80vw, 30vw', alt: '' }}
           {%- else -%}
-            <img class="rooms__img" src="{{ block.settings.fallback | asset_url }}" alt="" loading="lazy" width="880" height="1168">
+            <img src="{{ block.settings.fallback | asset_url }}" alt="" loading="lazy" width="880" height="1168">
           {%- endif -%}
-        {%- endfor -%}
-      </div>
-      <div class="rooms__plate" aria-hidden="true"><em>N°</em><span>01</span></div>
-    </div>
-
-    <div class="rooms__panels">
-      {%- for block in section.blocks -%}
-        {%- assign c = block.settings.collection -%}
-        <article class="room" data-number="{{ forloop.index | prepend: '0' | slice: -2, 2 }}" data-tint="{{ block.settings.tint }}" {{ block.shopify_attributes }}>
-          {%- if block.settings.image != blank -%}
-            {{ block.settings.image | image_url: width: 900 | image_tag: class: 'room__img-m', loading: 'lazy', alt: '' }}
-          {%- else -%}
-            <img class="room__img-m" src="{{ block.settings.fallback | asset_url }}" alt="" loading="lazy" width="880" height="1168">
-          {%- endif -%}
-          <p class="t-caps room__num">Room {{ forloop.index | prepend: '0' | slice: -2, 2 }}</p>
-          <h3 class="room__name t-display">{{ block.settings.name | default: c.title }}</h3>
-          <p class="room__line">{{ block.settings.line }}</p>
-          <p class="room__desc">{{ block.settings.description }}</p>
-          {%- if c != blank -%}
-            <div class="room__chips">
-              {%- for product in c.products limit: 3 -%}
-                <a href="{{ product.url }}" class="room__chip" data-cursor="view">
-                  {{ product.featured_media | image_url: width: 300 | image_tag: loading: 'lazy', alt: '' }}
-                  <span>{{ product.title }}</span>
-                  <em>{{ product.price | money_without_trailing_zeros }}</em>
-                </a>
-              {%- endfor -%}
-            </div>
-            <a href="{{ c.url }}" class="btn btn--ghost"><span>Enter the room</span></a>
-          {%- endif -%}
-        </article>
-      {%- endfor -%}
-    </div>
+        </span>
+        <span class="room__num t-caps">Room {{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+        <span class="room__name">{{ block.settings.name | default: c.title }}</span>
+        <span class="room__line">{{ block.settings.line }}</span>
+      </a>
+    {%- endfor -%}
   </div>
 </section>
 
@@ -54,7 +27,7 @@
   "name": "Rooms",
   "max_blocks": 4,
   "settings": [
-    { "type": "text", "id": "label", "label": "Label", "default": "N° 04 — Walk through the haus" },
+    { "type": "text", "id": "label", "label": "Label", "default": "N° 03 — Walk through the haus" },
     { "type": "text", "id": "title", "label": "Title", "default": "every room has a uniform" }
   ],
   "blocks": [
@@ -65,12 +38,8 @@
         { "type": "collection", "id": "collection", "label": "Collection" },
         { "type": "text", "id": "name", "label": "Name" },
         { "type": "text", "id": "line", "label": "One-liner" },
-        { "type": "textarea", "id": "description", "label": "Description" },
         { "type": "image_picker", "id": "image", "label": "Photo" },
-        { "type": "text", "id": "fallback", "label": "Fallback photo (theme asset)", "default": "l-stretch.webp" },
-        { "type": "select", "id": "tint", "label": "Background tint", "default": "burgundy", "options": [
-          { "value": "burgundy", "label": "Blush" }, { "value": "sage", "label": "Sage" }, { "value": "blue", "label": "Dusty blue" }
-        ] }
+        { "type": "text", "id": "fallback", "label": "Fallback photo (theme asset)", "default": "l-stretch.webp" }
       ]
     }
   ],

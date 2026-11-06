@@ -1,7 +1,7 @@
 <section class="shop" data-header-tone="dark">
   <header class="pagehead">
     <p class="t-caps">Search</p>
-    <h1 class="t-display pagehead__title" data-split="chars">{% if search.performed %}{{ search.results_count }} found{% else %}find it{% endif %}</h1>
+    <h1 class="t-display pagehead__title" data-reveal>{% if search.performed %}{{ search.results_count }} found{% else %}find it{% endif %}</h1>
     <form action="{{ routes.search_url }}" method="get" class="tagform tagform--search" role="search">
       <span class="tagform__hole" aria-hidden="true"></span>
       <label for="search-q" class="sr-only">Search</label>

@@ -1,41 +1,151 @@
 {
   "sections": {
-    "intro": { "type": "haus-intro", "settings": { "eyebrow": "Our story", "title": "made to be lived in", "use_page_content": true } },
-    "story": { "type": "image-story", "settings": { "fallback": "l-kitchen.webp" } },
-    "ribbon": {
-      "type": "marquee",
-      "blocks": { "m1": { "type": "phrase", "settings": { "text": "consistent, never repetitive" } }, "m2": { "type": "phrase", "settings": { "text": "graphics with photography" } }, "m3": { "type": "phrase", "settings": { "text": "lifestyle + product" } }, "m4": { "type": "phrase", "settings": { "text": "trends, worn naturally" } } },
-      "block_order": ["m1", "m2", "m3", "m4"],
-      "settings": { "tone": "cream" }
+    "intro": {
+      "type": "haus-intro",
+      "settings": {
+        "eyebrow": "Our story",
+        "title": "made to be lived in",
+        "use_page_content": true
+      }
+    },
+    "story": {
+      "type": "image-story",
+      "settings": {
+        "fallback": "l-kitchen.webp"
+      }
     },
     "palette": {
       "type": "palette",
       "blocks": {
-        "c1": { "type": "colour", "settings": { "name": "Cream", "color": "#F3F0E9", "ink": "#473C38", "note": "Linen, morning light, the first coffee." } },
-        "c2": { "type": "colour", "settings": { "name": "Dusty Blue", "color": "#AAB7C4", "ink": "#2B2522", "note": "7am through the curtains." } },
-        "c3": { "type": "colour", "settings": { "name": "Sage Green", "color": "#737B5B", "ink": "#F3F0E9", "note": "Our pouch, our piping, our signature." } },
-        "c4": { "type": "colour", "settings": { "name": "Burgundy", "color": "#743F46", "ink": "#F3F0E9", "note": "Staying in on purpose." } },
-        "c5": { "type": "colour", "settings": { "name": "Espresso", "color": "#473C38", "ink": "#F3F0E9", "note": "The second coffee. And the third." } }
+        "c1": {
+          "type": "colour",
+          "settings": {
+            "name": "Cream",
+            "color": "#F3F0E9",
+            "ink": "#473C38",
+            "note": "Linen, morning light, the first coffee."
+          }
+        },
+        "c2": {
+          "type": "colour",
+          "settings": {
+            "name": "Dusty Blue",
+            "color": "#AAB7C4",
+            "ink": "#2B2522",
+            "note": "7am through the curtains."
+          }
+        },
+        "c3": {
+          "type": "colour",
+          "settings": {
+            "name": "Sage Green",
+            "color": "#737B5B",
+            "ink": "#F3F0E9",
+            "note": "Our pouch, our piping, our signature."
+          }
+        },
+        "c4": {
+          "type": "colour",
+          "settings": {
+            "name": "Burgundy",
+            "color": "#743F46",
+            "ink": "#F3F0E9",
+            "note": "Staying in on purpose."
+          }
+        },
+        "c5": {
+          "type": "colour",
+          "settings": {
+            "name": "Espresso",
+            "color": "#473C38",
+            "ink": "#F3F0E9",
+            "note": "The second coffee. And the third."
+          }
+        }
       },
-      "block_order": ["c1", "c2", "c3", "c4", "c5"],
+      "block_order": [
+        "c1",
+        "c2",
+        "c3",
+        "c4",
+        "c5"
+      ],
       "settings": {}
     },
     "unboxing": {
       "type": "packaging",
-      "blocks": { "s1": { "type": "step", "settings": { "text": "Folded by hand" } }, "s2": { "type": "step", "settings": { "text": "Tucked in sage linen" } }, "s3": { "type": "step", "settings": { "text": "Tied with black satin" } }, "s4": { "type": "step", "settings": { "text": "Signed, with a thank you" } } },
-      "block_order": ["s1", "s2", "s3", "s4"],
+      "blocks": {
+        "s1": {
+          "type": "step",
+          "settings": {
+            "text": "Folded by hand"
+          }
+        },
+        "s2": {
+          "type": "step",
+          "settings": {
+            "text": "Tucked in sage linen"
+          }
+        },
+        "s3": {
+          "type": "step",
+          "settings": {
+            "text": "Tied with black satin"
+          }
+        },
+        "s4": {
+          "type": "step",
+          "settings": {
+            "text": "Signed, with a thank you"
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
       "settings": {}
     },
     "care": {
       "type": "care-info",
       "blocks": {
-        "d1": { "type": "card", "settings": { "title": "Delivery", "text": "Same-day in Cairo for orders before 1pm. 2–4 working days everywhere else in Egypt. Complimentary over EGP 5,000." } },
-        "d2": { "type": "card", "settings": { "title": "Exchanges", "text": "Changed your mind? Exchange within 14 days — unworn, tags on, folded back into the pouch." } },
-        "d3": { "type": "card", "settings": { "title": "Care", "text": "Cold wash, line dry, a warm iron if you must. Everything gets softer with time — that’s the point." } }
+        "d1": {
+          "type": "card",
+          "settings": {
+            "title": "Delivery",
+            "text": "Same-day in Cairo for orders before 1pm. 2–4 working days everywhere else in Egypt. Complimentary over EGP 5,000."
+          }
+        },
+        "d2": {
+          "type": "card",
+          "settings": {
+            "title": "Exchanges",
+            "text": "Changed your mind? Exchange within 14 days — unworn, tags on, folded back into the pouch."
+          }
+        },
+        "d3": {
+          "type": "card",
+          "settings": {
+            "title": "Care",
+            "text": "Cold wash, line dry, a warm iron if you must. Everything gets softer with time — that’s the point."
+          }
+        }
       },
-      "block_order": ["d1", "d2", "d3"],
+      "block_order": [
+        "d1",
+        "d2",
+        "d3"
+      ],
       "settings": {}
     }
   },
-  "order": ["intro", "story", "ribbon", "palette", "unboxing", "care"]
+  "order": [
+    "intro",
+    "story",
+    "palette",
+    "unboxing",
+    "care"
+  ]
 }
