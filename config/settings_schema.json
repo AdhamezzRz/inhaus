@@ -18,7 +18,8 @@
     "name": "Experience",
     "settings": [
       { "type": "checkbox", "id": "show_preloader", "label": "Show the handwritten intro (once per visit)", "default": true },
-      { "type": "text", "id": "preloader_season", "label": "Intro corner text", "default": "Fall 2026" },
+      { "type": "text", "id": "preloader_left", "label": "Intro corner text (left)", "default": "INN HAUS" },
+      { "type": "text", "id": "preloader_season", "label": "Intro corner text (right)", "default": "Fall 2026" },
       { "type": "checkbox", "id": "show_cursor", "label": "Sewing-button cursor", "default": true },
       { "type": "checkbox", "id": "show_lamp_cord", "label": "Pull-cord light switch", "default": true },
       { "type": "checkbox", "id": "page_curtains", "label": "Linen curtain page transitions", "default": true },

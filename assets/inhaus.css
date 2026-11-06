@@ -83,7 +83,6 @@ body {
   font-family: var(--sans);
   font-size: 16px;
   line-height: 1.55;
-  font-stretch: 92%;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: clip;
@@ -1192,8 +1191,6 @@ html.has-cursor * {
   background:
     repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.0) 0 14px, rgba(255, 255, 255, 0.22) 14px 22px, rgba(255, 255, 255, 0.04) 22px 34px),
     linear-gradient(90deg, rgba(247, 243, 233, 0.78), rgba(247, 243, 233, 0.38));
-  backdrop-filter: blur(1.5px);
-  -webkit-backdrop-filter: blur(1.5px);
   animation: sheer 7s ease-in-out infinite;
   transform-origin: 50% 0;
 }
@@ -1591,7 +1588,9 @@ html.has-cursor * {
   position: relative;
   width: min(100%, 64vh);
   aspect-ratio: 4/5;
-  clip-path: var(--blob);
+  border-radius: 52% 48% 46% 54% / 44% 52% 48% 56%;
+  overflow: hidden;
+  animation: blob 14s ease-in-out infinite;
 }
 .rooms__img {
   position: absolute;
@@ -3375,7 +3374,8 @@ html.is-arriving .curtain__mark {
     max-width: 460px;
     aspect-ratio: 4/5;
     object-fit: cover;
-    clip-path: var(--blob);
+    border-radius: 52% 48% 46% 54% / 44% 52% 48% 56%;
+    animation: blob 14s ease-in-out infinite;
     margin-bottom: 10px;
   }
   .polaroids__table {
@@ -3583,4 +3583,30 @@ html.is-arriving .curtain .wordmark__pen path {
 }
 .soon .tagform::before {
   background: #fff;
+}
+.pouch {
+  visibility: hidden;
+}
+
+@keyframes blob {
+  0%, 100% { border-radius: 52% 48% 46% 54% / 44% 52% 48% 56%; }
+  33% { border-radius: 44% 56% 58% 42% / 56% 42% 58% 44%; }
+  66% { border-radius: 58% 42% 40% 60% / 48% 60% 40% 52%; }
+}
+/* Lighter on phones: no animated grain, no blur layers */
+@media (hover: none), (pointer: coarse), (max-width: 860px) {
+  .grain { animation: none; opacity: 0.05; inset: 0; }
+  .header__bar::before, .shopbar, .pouch__veil { backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
+.preloader { cursor: pointer; }
+.preloader__skip {
+  position: absolute;
+  bottom: 26px;
+  right: var(--gutter);
+  font-family: var(--label);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--espresso);
+  opacity: 0.6;
 }

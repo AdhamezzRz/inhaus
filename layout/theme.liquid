@@ -26,7 +26,7 @@
     <style>
       @font-face { font-family: 'IH Bodoni'; src: url({{ 'ih-bodoni.woff2' | asset_url }}) format('woff2'); font-weight: 400 900; font-style: normal; font-display: swap; }
       @font-face { font-family: 'IH Bodoni'; src: url({{ 'ih-bodoni-italic.woff2' | asset_url }}) format('woff2'); font-weight: 400 900; font-style: italic; font-display: swap; }
-      @font-face { font-family: 'IH Archivo'; src: url({{ 'ih-archivo.woff2' | asset_url }}) format('woff2'); font-weight: 100 900; font-stretch: 62% 125%; font-display: swap; }
+      @font-face { font-family: 'IH Archivo'; src: url({{ 'ih-archivo.woff2' | asset_url }}) format('woff2'); font-weight: 400; font-display: swap; }
       @font-face { font-family: 'IH Archivo Narrow'; src: url({{ 'ih-archivo-narrow-400.woff2' | asset_url }}) format('woff2'); font-weight: 400; font-display: swap; }
       @font-face { font-family: 'IH Archivo Narrow'; src: url({{ 'ih-archivo-narrow-500.woff2' | asset_url }}) format('woff2'); font-weight: 500; font-display: swap; }
       :root { --monogram: url({{ 'monogram.svg' | asset_url }}); }
@@ -42,6 +42,8 @@
         {%- endif %}
         if (!calm && !d.classList.contains('is-loading') && sessionStorage.getItem('innhaus-curtain') === '1') d.classList.add('is-arriving');
         sessionStorage.removeItem('innhaus-curtain');
+        // Safety net: never leave the page locked behind the intro or the curtains.
+        setTimeout(function () { d.classList.remove('is-loading', 'is-arriving'); d.style.overflow = ''; }, 6500);
       } catch (e) {}
     </script>
 
@@ -56,10 +58,10 @@
     {%- if settings.show_preloader -%}
       <div class="preloader" aria-hidden="true">
         <div class="preloader__pattern"></div>
-        <div class="preloader__meta"><span>{{ shop.name }}</span><span>{{ settings.preloader_season }}</span></div>
+        <div class="preloader__meta"><span>{{ settings.preloader_left }}</span><span>{{ settings.preloader_season }}</span></div>
         <div class="preloader__mark">
           {% render 'wordmark', write: true, uid: 'preloader', class: 'preloader__logo' %}
-          <svg class="preloader__nibs" viewBox="0 0 900 442" aria-hidden="true">
+          <svg class="preloader__nibs" viewBox="0 0 900 447" aria-hidden="true">
             {% render 'pen-guides' %}
             <circle class="preloader__nib" r="0" cx="0" cy="0"/>
           </svg>
@@ -69,6 +71,7 @@
           {%- for c in chars -%}<span>{% if c == ' ' %}&nbsp;{% else %}{{ c }}{% endif %}</span>{%- endfor -%}
         </p>
         <div class="preloader__count">000</div>
+        <button type="button" class="preloader__skip">Skip</button>
       </div>
     {%- endif -%}
 
@@ -127,10 +130,7 @@
     <script src="{{ 'vendor-ScrollTrigger.min.js' | asset_url }}" defer></script>
     <script src="{{ 'vendor-SplitText.min.js' | asset_url }}" defer></script>
     <script src="{{ 'vendor-DrawSVGPlugin.min.js' | asset_url }}" defer></script>
-    <script src="{{ 'vendor-MorphSVGPlugin.min.js' | asset_url }}" defer></script>
     <script src="{{ 'vendor-Draggable.min.js' | asset_url }}" defer></script>
-    <script src="{{ 'vendor-InertiaPlugin.min.js' | asset_url }}" defer></script>
-    <script src="{{ 'vendor-Flip.min.js' | asset_url }}" defer></script>
     <script src="{{ 'vendor-CustomEase.min.js' | asset_url }}" defer></script>
     <script src="{{ 'vendor-lenis.min.js' | asset_url }}" defer></script>
     <script src="{{ 'inhaus.js' | asset_url }}" defer></script>

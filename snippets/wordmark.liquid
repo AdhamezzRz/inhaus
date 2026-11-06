@@ -4,11 +4,11 @@
   Usage: {% render "wordmark", write: true, uid: "footer", class: "footer__mark" %}
 {%- endcomment -%}
 {%- assign mask_id = "wm-" | append: uid -%}
-<svg class="wordmark{% if write %} wordmark--write{% endif %} {{ class }}" viewBox="0 0 900 442" role="img" aria-label="inn haus" fill="currentColor">
+<svg class="wordmark{% if write %} wordmark--write{% endif %} {{ class }}" viewBox="0 0 900 447" role="img" aria-label="inn haus" fill="currentColor">
   {%- if write -%}
-    <defs><mask id="{{ mask_id }}" maskUnits="userSpaceOnUse" x="0" y="0" width="900" height="442"><g class="wordmark__pen" fill="none" stroke="#fff" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"><path d="M 122 62 L 156 26 M 106 96 L 34 250 L 60 245 L 120 190 L 175 140 L 226 92 L 214 110 L 180 188 L 222 136 L 285 80 L 280 110 L 276 140 L 292 152 L 340 125 L 372 90 L 400 60 L 395 72 L 348 145 L 380 110 L 430 62 L 466 38 L 452 80 L 438 125 L 448 145 L 470 148 C 560 120, 700 60, 875 28"/><path d="M 252 168 L 100 422 M 140 368 L 190 320 L 244 280 L 236 320 L 220 372 L 226 395 L 244 396 L 300 350 L 340 300 L 382 262 L 360 300 L 310 360 L 305 372 L 322 368 L 362 330 L 410 268 L 398 300 L 386 350 L 396 368 L 450 320 L 500 255 L 480 300 L 462 340 L 474 346 L 520 300 L 562 248 L 545 290 L 534 340 L 546 350 L 600 310 L 650 240 L 716 192 L 680 230 L 655 265 L 668 285 L 690 300 L 700 330 L 680 360 L 640 395 L 600 415 L 600 400 L 650 345 L 680 320"/></g></mask></defs>
-    <g mask="url(#{{ mask_id }})"><use href="#ih-logo" width="900" height="442"/></g>
+    <defs><mask id="{{ mask_id }}" maskUnits="userSpaceOnUse" x="0" y="0" width="900" height="447"><g class="wordmark__pen" fill="none" stroke="#fff" stroke-width="40" stroke-linecap="round" stroke-linejoin="round"><path d="M 122 62 L 156 26 M 106 96 L 34 250 L 60 245 L 120 190 L 175 140 L 226 92 L 214 110 L 180 188 L 222 136 L 285 80 L 280 110 L 276 140 L 292 152 L 340 125 L 372 90 L 400 60 L 395 72 L 348 145 L 380 110 L 430 62 L 466 38 L 452 80 L 438 125 L 448 145 L 470 148 C 560 120, 700 60, 875 28"/><path d="M 252 168 L 100 422 M 140 368 L 190 320 L 244 280 L 236 320 L 220 372 L 226 395 L 244 396 L 300 350 L 340 300 L 382 262 L 360 300 L 310 360 L 305 372 L 322 368 L 362 330 L 410 268 L 398 300 L 386 350 L 396 368 L 450 320 L 500 255 L 480 300 L 462 340 L 474 346 L 520 300 L 562 248 L 545 290 L 534 340 L 546 350 L 600 310 L 650 240 L 716 192 L 680 230 L 655 265 L 668 285 L 690 300 L 700 330 L 680 360 L 640 395 L 600 415 L 600 400 L 650 345 L 680 320"/></g></mask></defs>
+    <g mask="url(#{{ mask_id }})"><use href="#ih-logo" width="900" height="447"/></g>
   {%- else -%}
-    <use href="#ih-logo" width="900" height="442"/>
+    <use href="#ih-logo" width="900" height="447"/>
   {%- endif -%}
 </svg>

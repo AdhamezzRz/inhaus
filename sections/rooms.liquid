@@ -1,15 +1,10 @@
-{%- assign blobs = 'M0.52,0.02 C0.74,0.0,0.96,0.14,0.98,0.40 C1.0,0.62,0.9,0.86,0.66,0.96 C0.44,1.04,0.16,0.94,0.06,0.72 C-0.04,0.5,0.04,0.22,0.24,0.1 C0.33,0.05,0.42,0.03,0.52,0.02 Z' -%}
 <section class="rooms" data-header-tone="dark" data-section-type="rooms" id="rooms">
-  <svg width="0" height="0" class="sr-only" aria-hidden="true">
-    <clipPath id="room-blob-{{ section.id }}" clipPathUnits="objectBoundingBox"><path d="{{ blobs }}"/></clipPath>
-  </svg>
-
   <div class="rooms__head">
     <p class="t-caps">{{ section.settings.label }}</p>
     <h2 class="t-display" data-split="lines">{{ section.settings.title }}</h2>
   </div>
 
-  <div class="rooms__grid" style="--blob: url(#room-blob-{{ section.id }})">
+  <div class="rooms__grid">
     <div class="rooms__sticky">
       <div class="rooms__visual">
         {%- for block in section.blocks -%}

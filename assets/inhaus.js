@@ -15,7 +15,8 @@
     return;
   }
 
-  gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin, MorphSVGPlugin, Draggable, InertiaPlugin, Flip, CustomEase);
+  gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin, Draggable, CustomEase);
+  ScrollTrigger.config({ ignoreMobileResize: true });
   CustomEase.create('haus', '0.65,0,0.15,1');
   CustomEase.create('silk', '0.22,1,0.36,1');
   gsap.defaults({ ease: 'silk', duration: 1 });
@@ -113,16 +114,16 @@
     var count = { v: 0 };
     penReset(pens);
 
-    var tl = gsap.timeline({ delay: 0.35 });
-    tl.to(count, { v: 100, duration: 3.4, ease: 'power2.inOut', onUpdate: function () { counter.textContent = String(Math.round(count.v)).padStart(3, '0'); } })
-      .fromTo(nib, { attr: { r: 0 } }, { attr: { r: 9 }, duration: 0.3, ease: 'back.out(3)' }, 0.2)
-      .to(pens[0], { drawSVG: '100%', duration: 1.7, ease: 'power1.inOut', onStart: penStart }, 0.3)
-      .to(pen, { p: 1, duration: 1.7, ease: 'power1.inOut', onUpdate: moveNib }, 0.3)
+    var tl = gsap.timeline({ delay: 0.15 });
+    tl.to(count, { v: 100, duration: 1.75, ease: 'power2.inOut', onUpdate: function () { counter.textContent = String(Math.round(count.v)).padStart(3, '0'); } })
+      .fromTo(nib, { attr: { r: 0 } }, { attr: { r: 9 }, duration: 0.2, ease: 'back.out(3)' }, 0.05)
+      .to(pens[0], { drawSVG: '100%', duration: 0.9, ease: 'power1.inOut', onStart: penStart }, 0.1)
+      .to(pen, { p: 1, duration: 0.9, ease: 'power1.inOut', onUpdate: moveNib }, 0.1)
       .set(pen, { line: 1, p: 0 })
-      .to(pens[1], { drawSVG: '100%', duration: 1.5, ease: 'power1.inOut', onStart: penStart }, '>')
-      .to(pen, { p: 1, duration: 1.5, ease: 'power1.inOut', onUpdate: moveNib }, '<')
-      .to(nib, { attr: { r: 0 }, duration: 0.25 }, '>-0.05')
-      .from($$('.preloader__tag span', el), { opacity: 0, y: 10, filter: 'blur(4px)', stagger: 0.035, duration: 0.6 }, '-=1.1')
+      .to(pens[1], { drawSVG: '100%', duration: 0.8, ease: 'power1.inOut', onStart: penStart }, '>')
+      .to(pen, { p: 1, duration: 0.8, ease: 'power1.inOut', onUpdate: moveNib }, '<')
+      .to(nib, { attr: { r: 0 }, duration: 0.2 }, '>-0.05')
+      .from($$('.preloader__tag span', el), { opacity: 0, y: 8, stagger: 0.02, duration: 0.4 }, '-=0.7')
       .add(function () { try { sessionStorage.setItem('innhaus-intro-seen', '1'); } catch (e) {} })
       .add(function () {
         var target = $('#header-logo');
@@ -134,7 +135,7 @@
             ScrollTrigger.refresh();
           }
         });
-        exit.to($$('.preloader__tag, .preloader__count, .preloader__meta', el), { opacity: 0, duration: 0.4, ease: 'power2.in' });
+        exit.to($$('.preloader__tag, .preloader__count, .preloader__meta, .preloader__skip', el), { opacity: 0, duration: 0.3, ease: 'power2.in' });
         if (target && mark) {
           var a = mark.getBoundingClientRect();
           var b = target.getBoundingClientRect();
@@ -142,13 +143,22 @@
             x: b.left + b.width / 2 - (a.left + a.width / 2),
             y: b.top + b.height / 2 - (a.top + a.height / 2),
             scale: b.width / a.width,
-            duration: 1.25,
+            duration: 0.95,
             ease: 'haus'
-          }, '<0.1');
+          }, '<0.05');
         }
-        exit.to(el, { clipPath: 'inset(0% 0% 100% 0%)', duration: 1.25, ease: 'haus' }, '<0.05')
-          .add(markReady, '<0.45');
-      }, '+=0.35');
+        exit.to(el, { clipPath: 'inset(0% 0% 100% 0%)', duration: 0.95, ease: 'haus' }, '<0.05')
+          .add(markReady, '<0.3');
+      }, '+=0.15');
+    // Impatient? A tap, click, key or scroll skips straight to the exit.
+    var skip = function () {
+      if (tl.progress() < 0.9) {
+        pens.forEach(function (p) { p.classList.add('is-drawing'); });
+        tl.progress(0.999);
+      }
+      ['pointerdown', 'wheel', 'touchstart', 'keydown'].forEach(function (ev) { window.removeEventListener(ev, skip); });
+    };
+    ['pointerdown', 'wheel', 'touchstart', 'keydown'].forEach(function (ev) { window.addEventListener(ev, skip, { passive: true }); });
     return true;
   }
 
@@ -371,6 +381,7 @@
     var panel = $('.pouch__panel', el);
     var lines = $('[data-pouch-lines]', el);
     var isOpen = false;
+    gsap.set(panel, { xPercent: 105 });
     var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
 
     function render(cart) {
@@ -466,6 +477,9 @@
     }
 
     function add(variantId, from, image) {
+      // Bring the header back so the piece has somewhere visible to land.
+      var hdr = $('[data-header]');
+      if (hdr) hdr.classList.remove('is-hidden');
       var request = fetch(cfg.routes.cartAdd, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
@@ -475,7 +489,12 @@
       });
       return Promise.all([request, fly(from, image)])
         .then(fetchCart)
-        .then(function (cart) { render(cart); bump(); return cart; });
+        .then(function (cart) {
+          render(cart);
+          bump();
+          if (touch) setTimeout(open, 650);
+          return cart;
+        });
     }
 
     function change(key, qty) {
@@ -640,6 +659,7 @@
     var settle = gsap.delayedCall(0.25, function () { gsap.to(loop, { timeScale: dir, duration: 1.2, overwrite: true }); skew(0); }).pause();
     ScrollTrigger.create({
       trigger: el, start: 'top bottom', end: 'bottom top',
+      onToggle: function (self) { self.isActive ? loop.play() : loop.pause(); },
       onUpdate: function (self) {
         var v = self.getVelocity();
         dir = self.direction;
@@ -684,7 +704,10 @@
       velocity *= 0.9;
       drawRope();
     };
-    gsap.ticker.add(tick);
+    var io = new IntersectionObserver(function (en) {
+      en[0].isIntersecting ? gsap.ticker.add(tick) : gsap.ticker.remove(tick);
+    }, { rootMargin: '120px' });
+    io.observe(el);
     var distance = function () { return track.scrollWidth - innerWidth + 40; };
     gsap.to(track, {
       x: function () { return -distance(); }, ease: 'none',
@@ -700,24 +723,16 @@
       if (i >= 0) springs[i].impulse = clamp(-10, 10, springs[i].impulse + e.movementX * 0.35);
     };
     el.addEventListener('pointermove', onMove);
-    return function () { gsap.ticker.remove(tick); el.removeEventListener('pointermove', onMove); };
+    return function () { io.disconnect(); gsap.ticker.remove(tick); el.removeEventListener('pointermove', onMove); };
   };
 
-  var BLOBS = [
-    'M0.48,0.04 C0.72,-0.02,0.94,0.2,0.96,0.44 C0.98,0.7,0.82,0.92,0.58,0.98 C0.34,1.03,0.08,0.86,0.03,0.6 C-0.02,0.36,0.1,0.14,0.3,0.07 C0.36,0.05,0.42,0.05,0.48,0.04 Z',
-    'M0.56,0.0 C0.8,0.04,1.0,0.28,0.97,0.52 C0.94,0.78,0.74,0.98,0.48,0.99 C0.22,1.0,0.02,0.8,0.01,0.54 C0.0,0.3,0.16,0.08,0.38,0.02 C0.44,0.0,0.5,0.0,0.56,0.0 Z',
-    'M0.5,0.0 C0.7,0.02,0.9,0.1,0.97,0.34 C1.04,0.58,0.92,0.84,0.7,0.95 C0.48,1.05,0.2,0.98,0.08,0.78 C-0.04,0.58,-0.02,0.3,0.16,0.12 C0.26,0.03,0.38,-0.01,0.5,0.0 Z'
-  ];
   var TINTS = { burgundy: 'var(--tint-burgundy)', sage: 'var(--tint-sage)', blue: 'var(--tint-blue)' };
 
   sections.rooms = function (el) {
-    var blob = $('clipPath path', el);
     var imgs = $$('.rooms__img', el);
     var panels = $$('.room', el);
     var plate = $('.rooms__plate span', el);
     var visual = $('.rooms__visual', el);
-    var breathe = gsap.timeline({ repeat: -1, yoyo: true, defaults: { duration: 3.2, ease: 'sine.inOut' } });
-    BLOBS.forEach(function (b) { breathe.to(blob, { morphSVG: b }); });
     var active = -1;
     var show = function (i) {
       if (i === active) return;
@@ -733,7 +748,6 @@
       ScrollTrigger.create({ trigger: p, start: 'top 55%', end: 'bottom 55%', onToggle: function (self) { if (self.isActive) show(i); } });
       gsap.from($$('.room__chip', p), { y: 50, opacity: 0, rotation: function (k) { return k % 2 ? 6 : -6; }, stagger: 0.1, duration: 1, scrollTrigger: { trigger: p, start: 'top 70%' } });
     });
-    return function () { breathe.kill(); };
   };
 
   sections.fabric = function (el) {
@@ -759,7 +773,7 @@
     gl.attachShader(prog, v); gl.attachShader(prog, f); gl.linkProgram(prog);
     if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
     gl.useProgram(prog);
-    var N = 160, verts = [], idx = [];
+    var N = touch ? 80 : 140, verts = [], idx = [];
     for (var y = 0; y <= N; y++) for (var x = 0; x <= N; x++) verts.push(x / N, y / N);
     for (y = 0; y < N; y++) for (x = 0; x < N; x++) { var i0 = y * (N + 1) + x; idx.push(i0, i0 + 1, i0 + N + 1, i0 + 1, i0 + N + 2, i0 + N + 1); }
     var vb = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, vb); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts), gl.STATIC_DRAW);
@@ -788,7 +802,7 @@
     };
     img.src = host.getAttribute('data-texture');
     var resize = function () {
-      var dpr = Math.min(devicePixelRatio || 1, 2);
+      var dpr = Math.min(devicePixelRatio || 1, touch ? 1.25 : 1.75);
       var w = host.clientWidth, h = host.clientHeight;
       canvas.width = w * dpr; canvas.height = h * dpr;
       gl.viewport(0, 0, canvas.width, canvas.height);
@@ -831,7 +845,7 @@
       stagger: { each: 0.08, from: 'random' }, scrollTrigger: { trigger: table, start: 'top 75%' }
     });
     var drags = Draggable.create(cards, {
-      type: 'x,y', bounds: table, inertia: true, edgeResistance: 0.6, zIndexBoost: false,
+      type: 'x,y', bounds: table, edgeResistance: 0.6, zIndexBoost: false,
       onPress: function () { z += 1; gsap.set(this.target, { zIndex: z }); gsap.to(this.target, { scale: 1.06, boxShadow: '0 40px 60px -20px rgba(43,37,34,.45)', duration: 0.3 }); },
       onDrag: function () { gsap.to(this.target, { rotation: clamp(-18, 18, this.deltaX * 1.4), duration: 0.4 }); },
       onRelease: function () { gsap.to(this.target, { scale: 1, rotation: gsap.utils.random(-9, 9), boxShadow: '0 18px 30px -18px rgba(43,37,34,.35)', duration: 0.8, ease: 'elastic.out(1, 0.6)' }); }
@@ -863,14 +877,15 @@
     var cards = function () { return $$('.pcard', grid); };
     var original = cards();
     var line = $('[data-roomline]', el);
+    // Cards fold away, the grid rearranges, and the new set rises in one by one.
     var flipIt = function (fn) {
-      var state = Flip.getState(cards());
-      fn();
-      Flip.from(state, {
-        duration: 0.9, ease: 'haus', absolute: true, stagger: 0.03,
-        onEnter: function (els) { return gsap.fromTo(els, { opacity: 0, scale: 0.85, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: 0.8, stagger: 0.05 }); },
-        onLeave: function (els) { return gsap.to(els, { opacity: 0, scale: 0.85, duration: 0.4 }); },
-        onComplete: function () { ScrollTrigger.refresh(); }
+      gsap.to(cards().filter(function (c) { return !c.hidden; }), {
+        opacity: 0, y: 24, scale: 0.96, duration: 0.3, stagger: 0.02, ease: 'power2.in',
+        onComplete: function () {
+          fn();
+          gsap.fromTo(cards().filter(function (c) { return !c.hidden; }), { opacity: 0, y: 40, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.05, ease: 'silk', clearProps: 'transform' });
+          ScrollTrigger.refresh();
+        }
       });
     };
     if (isAll) {
@@ -1045,7 +1060,9 @@
     var ctx = gsap.context(function () {
       types.forEach(function (el) {
         var fn = sections[el.getAttribute('data-section-type')];
-        if (fn) { var undo = fn(el); if (typeof undo === 'function') ctxs.push(undo); }
+        if (!fn) return;
+        try { var undo = fn(el); if (typeof undo === 'function') ctxs.push(undo); }
+        catch (err) { console.warn('[inn haus] section failed', el.getAttribute('data-section-type'), err); }
       });
       if ($('.haus-hero', host)) sections.intro($('.haus-hero', host));
       if ($('.lost', host)) sections.intro($('.lost', host));
@@ -1056,7 +1073,9 @@
   }
 
   function boot() {
-    var hadIntro = runPreloader();
+    var hadIntro = false;
+    try { hadIntro = runPreloader(); } catch (err) { console.warn('[inn haus] intro failed', err); }
+    if (!hadIntro) { root.classList.remove('is-loading'); lockScroll(false); }
     if (root.classList.contains('is-arriving')) {
       curtainPens.forEach(function (p) { p.classList.add('is-drawing'); });
       openCurtains(markReady);

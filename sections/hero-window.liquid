@@ -17,7 +17,7 @@
       {%- if section.settings.video != blank -%}
         {{ section.settings.video | video_tag: autoplay: false, loop: true, muted: true, playsinline: true, controls: false, preload: 'auto', class: 'hero__video', image_size: '1600x' }}
       {%- else -%}
-        <video class="hero__video" muted loop playsinline preload="auto" poster="{% if section.settings.poster != blank %}{{ section.settings.poster | image_url: width: 1800 }}{% else %}{{ 'l-hero.webp' | asset_url }}{% endif %}">
+        <video class="hero__video" muted loop playsinline autoplay preload="metadata" poster="{% if section.settings.poster != blank %}{{ section.settings.poster | image_url: width: 1800 }}{% else %}{{ 'l-hero.webp' | asset_url }}{% endif %}">
           <source src="{{ 'hero.webm' | asset_url }}" type="video/webm">
           <source src="{{ 'hero.mp4' | asset_url }}" type="video/mp4">
         </video>
