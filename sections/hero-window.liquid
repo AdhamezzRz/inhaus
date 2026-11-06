@@ -27,10 +27,7 @@
       <div class="hero__shade"></div>
     </div>
 
-    <svg class="hero__outline" aria-hidden="true">
-      <path class="hero__frame"/>
-      <path class="hero__sill"/>
-    </svg>
+    <div class="hero__frame" aria-hidden="true"></div>
 
     <h1 class="hero__title">
       <span class="hero__word hero__word--l">{{ left }}</span>
@@ -38,6 +35,9 @@
     </h1>
 
     <p class="hero__caption t-display">{{ section.settings.caption }}</p>
+    {%- if section.settings.cta_label != blank -%}
+      <a class="hero__cta btn btn--cream" href="{{ section.settings.cta_link | default: routes.all_products_collection_url }}">{{ section.settings.cta_label }}</a>
+    {%- endif -%}
 
     <div class="hero__cue">
       <span class="hero__key" aria-hidden="true"><svg viewBox="0 0 24 48"><circle cx="12" cy="9" r="7"/><path d="M12 16 V44 M12 34 H18 M12 40 H16"/></svg></span>
@@ -54,6 +54,8 @@
     { "type": "text", "id": "eyebrow_right", "label": "Eyebrow (right)", "default": "N° 01 — The Day In edit" },
     { "type": "text", "id": "title", "label": "Title", "info": "Split at the first full stop: one half each side of the window.", "default": "wear it. live in it." },
     { "type": "text", "id": "caption", "label": "Caption once inside", "default": "Come in. Stay a while." },
+    { "type": "text", "id": "cta_label", "label": "Button once inside", "default": "Shop the edit" },
+    { "type": "url", "id": "cta_link", "label": "Button link" },
     { "type": "text", "id": "cue", "label": "Scroll cue", "default": "Scroll to step inside" },
     { "type": "video", "id": "video", "label": "Video", "info": "Optional. Leave empty to use the built-in INN HAUS film." },
     { "type": "image_picker", "id": "poster", "label": "Poster image" }

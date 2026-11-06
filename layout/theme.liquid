@@ -39,7 +39,7 @@
           d.classList.add('is-loading');
           sessionStorage.setItem('innhaus-intro-seen', '1');
           // The intro is pure CSS; this is only a safety net if scripts never arrive.
-          setTimeout(function () { d.classList.remove('is-loading'); }, 3200);
+          setTimeout(function () { d.classList.remove('is-loading'); }, 4200);
         }
         {%- endif %}
       } catch (e) {}
@@ -55,10 +55,12 @@
 
     {%- if settings.show_preloader -%}
       <div class="preloader" aria-hidden="true">
+        <div class="door door--l"><span class="door__arch"></span><i class="door__knob"></i></div>
+        <div class="door door--r"><span class="door__arch"></span><i class="door__knob"></i></div>
         <div class="preloader__mark">
           {% render 'wordmark', write: true, uid: 'preloader', class: 'preloader__logo' %}
+          <p class="preloader__tag">{{ settings.tagline | upcase }}</p>
         </div>
-        <p class="preloader__tag">{{ settings.tagline | upcase }}</p>
       </div>
     {%- endif -%}
 

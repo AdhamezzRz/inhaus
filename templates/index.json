@@ -156,7 +156,7 @@
         "p8": {
           "type": "polaroid",
           "settings": {
-            "fallback": "l-packaging.webp",
+            "fallback": "l-wrap-pouch.webp",
             "caption": "wrapped like a gift",
             "frame": "burgundy"
           }
@@ -185,38 +185,6 @@
     },
     "unboxing": {
       "type": "packaging",
-      "blocks": {
-        "s1": {
-          "type": "step",
-          "settings": {
-            "text": "Folded by hand"
-          }
-        },
-        "s2": {
-          "type": "step",
-          "settings": {
-            "text": "Tucked in sage linen"
-          }
-        },
-        "s3": {
-          "type": "step",
-          "settings": {
-            "text": "Tied with black satin"
-          }
-        },
-        "s4": {
-          "type": "step",
-          "settings": {
-            "text": "Signed, with a thank you"
-          }
-        }
-      },
-      "block_order": [
-        "s1",
-        "s2",
-        "s3",
-        "s4"
-      ],
       "settings": {}
     },
     "journal": {

@@ -21,9 +21,9 @@
   <p class="manifesto__text">
     {%- for w in words -%}
       <span class="manifesto__w">{{ w }}</span>{{ ' ' }}
-      {%- if forloop.index0 == 5 -%}<span class="manifesto__pill" data-w="1.8" aria-hidden="true"><img src="{{ img1 }}" alt="" loading="lazy" width="300" height="300"></span>{{ ' ' }}{%- endif -%}
-      {%- if forloop.index0 == 13 -%}<span class="manifesto__pill" data-w="2.4" aria-hidden="true"><img src="{{ img2 }}" alt="" loading="lazy" width="300" height="300"></span>{{ ' ' }}{%- endif -%}
-      {%- if forloop.index0 == 22 -%}<span class="manifesto__pill" data-w="1.8" aria-hidden="true"><img src="{{ img3 }}" alt="" loading="lazy" width="300" height="300"></span>{{ ' ' }}{%- endif -%}
+      {%- if forloop.index0 == 2 -%}<span class="manifesto__pill" data-w="1.8" aria-hidden="true"><img src="{{ img1 }}" alt="" loading="lazy" width="300" height="300"></span>{{ ' ' }}{%- endif -%}
+      {%- if forloop.index0 == 9 -%}<span class="manifesto__pill" data-w="2.4" aria-hidden="true"><img src="{{ img2 }}" alt="" loading="lazy" width="300" height="300"></span>{{ ' ' }}{%- endif -%}
+      {%- if forloop.index0 == 13 -%}<span class="manifesto__pill" data-w="1.8" aria-hidden="true"><img src="{{ img3 }}" alt="" loading="lazy" width="300" height="300"></span>{{ ' ' }}{%- endif -%}
     {%- endfor -%}
   </p>
   <p class="manifesto__sign t-display">{{ section.settings.sign }}</p>
@@ -34,7 +34,7 @@
   "name": "Manifesto",
   "settings": [
     { "type": "text", "id": "label", "label": "Label", "default": "A note from the haus" },
-    { "type": "textarea", "id": "text", "label": "Statement", "default": "We make the clothes you live in — for the slow mornings, the friend’s-house evenings and the quick errand in between. Soft enough for the sofa, polished enough for the café on the corner." },
+    { "type": "textarea", "id": "text", "label": "Statement", "default": "Clothes you live in — soft enough for the sofa, polished enough for the café.", "info": "Small photos sit after the 3rd, 10th and 14th words." },
     { "type": "text", "id": "sign", "label": "Sign-off", "default": "— with love, from the haus" },
     { "type": "image_picker", "id": "image_1", "label": "Inline photo 1" },
     { "type": "image_picker", "id": "image_2", "label": "Inline photo 2" },

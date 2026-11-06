@@ -17,7 +17,7 @@
   /* Intro: the CSS plays it; we only tidy up (or skip it on a tap). */
   if (root.classList.contains('is-loading')) {
     var done = function () { root.classList.remove('is-loading'); };
-    setTimeout(done, 2300);
+    setTimeout(done, 2950);
     ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function (ev) {
       addEventListener(ev, done, { once: true, passive: true });
     });
@@ -66,24 +66,7 @@
 
   /* The arched window: geometry once, then a single --p variable on scroll */
   function hero(el) {
-    var stage = $('.hero__stage', el);
-    var svg = $('.hero__outline', el);
     var video = $('video', el);
-    var geo = function () {
-      var w = stage.clientWidth, h = stage.clientHeight, mobile = w < 760;
-      var ww = mobile ? w * 0.62 : Math.max(300, Math.min(470, w * 0.29));
-      var wh = mobile ? h * 0.5 : Math.max(380, Math.min(640, h * 0.64));
-      var B = h * (mobile ? 0.86 : 0.88), T = B - wh, L = (w - ww) / 2, R = L + ww, r = ww / 2;
-      el.style.setProperty('--wt', T + 'px');
-      el.style.setProperty('--wb', (h - B) + 'px');
-      el.style.setProperty('--wl', L + 'px');
-      el.style.setProperty('--wrt', (w - R) + 'px');
-      el.style.setProperty('--wr0', r + 'px');
-      el.style.setProperty('--ww', ww + 'px');
-      svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
-      $('.hero__frame', el).setAttribute('d', 'M' + L + ' ' + B + ' V' + (T + r) + ' A' + r + ' ' + r + ' 0 0 1 ' + R + ' ' + (T + r) + ' V' + B + ' Z');
-      $('.hero__sill', el).setAttribute('d', 'M' + (L - 24) + ' ' + (B + 6) + ' H' + (R + 24));
-    };
     var tone = 'dark';
     var progress = function () {
       var rect = el.getBoundingClientRect();
@@ -92,26 +75,29 @@
       el.style.setProperty('--p', p.toFixed(4));
       var t = p > 0.42 ? 'light' : 'dark';
       if (t !== tone) { tone = t; el.setAttribute('data-header-tone', t); }
+      el.classList.toggle('is-inside', p > 0.72);
     };
-    geo();
     progress();
-    var w0 = innerWidth;
-    addEventListener('resize', function () {
-      // Phones resize when the address bar slides; only re-measure on real changes.
-      if (Math.abs(innerWidth - w0) > 40 || !touch) { w0 = innerWidth; geo(); }
-      progress();
-    });
+    addEventListener('resize', progress);
     onScrollFns.push(progress);
     var start = function () {
       el.classList.add('is-ready');
       if (video) { var pr = video.play(); if (pr && pr.catch) pr.catch(function () {}); }
     };
-    root.classList.contains('is-loading') ? setTimeout(start, 1700) : requestAnimationFrame(start);
+    root.classList.contains('is-loading') ? setTimeout(start, 1500) : requestAnimationFrame(start);
     // Pause the film when it can't be seen
     if (video && io) new IntersectionObserver(function (en) {
       if (en[0].isIntersecting) { var pr = video.play(); if (pr && pr.catch) pr.catch(function () {}); } else video.pause();
     }).observe(el);
   }
+
+  /* Unboxing: turn the thank you card over */
+  $$('[data-flip]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var on = b.classList.toggle('is-flipped');
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  });
 
   /* Header: hide on the way down, tone from the section underneath, menu */
   (function header() {
@@ -352,10 +338,12 @@
     var info = {};
     try { info = JSON.parse($('[data-product-json]', el).textContent); } catch (e) {}
     var chosen = needs ? null : { id: input && input.value, available: !(add && add.disabled), price: prices[0] && prices[0].textContent };
+    var mobileAdd = $('[data-mobile-add]', el), mobileLabel = mobileAdd && $('span', mobileAdd);
     var setLabel = function () {
       if (!label) return;
       label.textContent = !chosen ? 'Choose your size' : !chosen.available ? 'Sold out' : 'Add to pouch — ' + chosen.price;
       if (add) add.disabled = !!(chosen && !chosen.available);
+      if (mobileLabel) mobileLabel.textContent = !chosen ? 'Pick a size' : !chosen.available ? 'Sold out' : 'Add to pouch';
     };
     tags.forEach(function (t) {
       t.addEventListener('click', function () {
@@ -382,7 +370,11 @@
         .then(function () { add.classList.remove('is-busy'); });
     };
     if (form) form.addEventListener('submit', function (e) { e.preventDefault(); submit(); });
-    var mobileAdd = $('[data-mobile-add]', el);
+    // The bar only shows while the real button is off screen, so the two never stack.
+    var bar = $('.pv__mobilebar', el), formBox = $('.pv__form', el);
+    if (bar && formBox && io) new IntersectionObserver(function (en) {
+      bar.classList.toggle('is-away', en[0].isIntersecting);
+    }).observe(formBox);
     if (mobileAdd) mobileAdd.addEventListener('click', function () {
       if (!chosen) { var s = $('.pv__sizes', el); if (s) s.scrollIntoView({ behavior: 'smooth', block: 'center' }); nudge(); return; }
       submit();

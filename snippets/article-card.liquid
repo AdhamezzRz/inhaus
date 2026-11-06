@@ -11,5 +11,5 @@
     <span>{{ article.published_at | date: '%-d %B %Y' }}</span>
   </span>
   <span class="jcard__title">{{ article.title }}</span>
-  <span class="jcard__excerpt">{{ article.excerpt_or_content | strip_html | truncatewords: 22 }}</span>
+  <span class="jcard__excerpt">{{ article.excerpt_or_content | strip_html | truncatewords: 12 }}</span>
 </a>

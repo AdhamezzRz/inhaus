@@ -7,7 +7,7 @@
       "settings": {
         "eyebrow": "The haus list",
         "title": "come over more often",
-        "text": "New drops, slow-living notes and first dibs on restocks. No spam — we hate it too.",
+        "text": "New drops and first dibs on restocks.",
         "rooms": ["day-in", "friends-house", "quick-errand", "little-things"],
         "menu": "inhaus-footer",
         "email": "hello@innhaus.com",
