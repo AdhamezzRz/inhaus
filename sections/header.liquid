@@ -29,10 +29,6 @@
     </a>
 
     <div class="header__actions">
-      <button type="button" class="header__lights ulink" data-lights aria-label="Switch the lights">
-        <span class="bulb" aria-hidden="true"></span>
-        <span class="header__lights-text" data-lights-text>Lights off</span>
-      </button>
       <a href="{{ routes.cart_url }}" class="header__pouch" id="pouch-target" data-pouch-open aria-label="Open your pouch">
         {% render 'icon-pouch', class: 'header__pouch-icon' %}
         <span class="header__count"><span data-cart-count>{{ cart.item_count }}</span></span>
@@ -74,7 +70,6 @@
   <div class="menu__foot">
     <span>{{ settings.tagline }}</span>
     <span>{{ section.settings.menu_note }}</span>
-    <button type="button" class="ulink" data-lights>Switch the lights</button>
   </div>
 </div>
 

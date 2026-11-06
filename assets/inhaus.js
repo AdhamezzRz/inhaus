@@ -2,7 +2,7 @@
  * INN HAUS — Wear it. Live in it.
  * Lightweight theme behaviour: no libraries, no animation loops.
  * One scroll moment (the arched window), gentle reveals, the cart pouch,
- * the menu, night mode, the shop filter and the product form.
+ * the menu, the shop filter and the product form.
  */
 (function () {
   'use strict';
@@ -17,7 +17,7 @@
   /* Intro: the CSS plays it; we only tidy up (or skip it on a tap). */
   if (root.classList.contains('is-loading')) {
     var done = function () { root.classList.remove('is-loading'); };
-    setTimeout(done, 2950);
+    setTimeout(done, 2500);
     ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function (ev) {
       addEventListener(ev, done, { once: true, passive: true });
     });
@@ -66,26 +66,33 @@
 
   /* The arched window: geometry once, then a single --p variable on scroll */
   function hero(el) {
-    var video = $('video', el);
-    var tone = 'dark';
+    var stage = $('.hero__stage', el), svg = $('.hero__veil', el), video = $('video', el);
+    var camera = window.IHHero;
     var progress = function () {
       var rect = el.getBoundingClientRect();
       var span = el.offsetHeight - innerHeight;
       var p = span > 0 ? Math.min(1, Math.max(0, -rect.top / span)) : 0;
       el.style.setProperty('--p', p.toFixed(4));
-      var t = p > 0.42 ? 'light' : 'dark';
-      if (t !== tone) { tone = t; el.setAttribute('data-header-tone', t); }
+      if (camera && stage && svg) camera(stage, svg, p);
       el.classList.toggle('is-inside', p > 0.72);
     };
     progress();
     addEventListener('resize', progress);
     onScrollFns.push(progress);
+    // The film drifts a touch with the pointer, so the letters feel like glass
+    if (!touch && !reduce && stage) {
+      var raf = 0, hx = 0, hy = 0;
+      stage.addEventListener('pointermove', function (e) {
+        hx = (e.clientX / innerWidth - 0.5) * 2; hy = (e.clientY / innerHeight - 0.5) * 2;
+        if (!raf) raf = requestAnimationFrame(function () { raf = 0; stage.style.setProperty('--hx', hx.toFixed(3)); stage.style.setProperty('--hy', hy.toFixed(3)); });
+      });
+      stage.addEventListener('pointerleave', function () { stage.style.setProperty('--hx', 0); stage.style.setProperty('--hy', 0); });
+    }
     var start = function () {
       el.classList.add('is-ready');
       if (video) { var pr = video.play(); if (pr && pr.catch) pr.catch(function () {}); }
     };
-    root.classList.contains('is-loading') ? setTimeout(start, 1500) : requestAnimationFrame(start);
-    // Pause the film when it can't be seen
+    requestAnimationFrame(start);
     if (video && io) new IntersectionObserver(function (en) {
       if (en[0].isIntersecting) { var pr = video.play(); if (pr && pr.catch) pr.catch(function () {}); } else video.pause();
     }).observe(el);
@@ -148,24 +155,6 @@
     toggle.addEventListener('click', function () { setMenu(!menuOpen); });
     addEventListener('keydown', function (e) { if (e.key === 'Escape' && menuOpen) setMenu(false); });
   })();
-
-  /* Night mode */
-  function setLightsText() {
-    var night = root.dataset.theme === 'night';
-    $$('[data-lights-text]').forEach(function (t) { t.textContent = night ? 'Lights on' : 'Lights off'; });
-    $$('.bulb').forEach(function (b) { b.classList.toggle('is-off', night); });
-  }
-  setLightsText();
-  document.addEventListener('click', function (e) {
-    if (!e.target.closest('[data-lights]')) return;
-    e.preventDefault();
-    var next = root.dataset.theme === 'night' ? 'day' : 'night';
-    root.classList.add('theme-shift');
-    root.dataset.theme = next;
-    try { localStorage.setItem('innhaus-theme', next); } catch (err) {}
-    setLightsText();
-    setTimeout(function () { root.classList.remove('theme-shift'); }, 900);
-  });
 
   /* The pouch (cart drawer) */
   var Pouch = (function () {

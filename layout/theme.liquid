@@ -30,8 +30,6 @@
     <script>
       try {
         var d = document.documentElement;
-        var t = localStorage.getItem('innhaus-theme');
-        if (t) d.dataset.theme = t;
         d.classList.add('js');
         var calm = matchMedia('(prefers-reduced-motion: reduce)').matches || d.hasAttribute('data-design-mode');
         {%- if settings.show_preloader %}
@@ -53,10 +51,9 @@
     <a class="skip-link sr-only" href="#main">Skip to content</a>
     {% render 'wordmark-sprite' %}
 
-    {%- if settings.show_preloader -%}
+    {%- if settings.show_preloader and template.name != 'index' -%}
+      {%- comment -%} On the home page the hero plays the intro itself. {%- endcomment -%}
       <div class="preloader" aria-hidden="true">
-        <div class="door door--l"><span class="door__arch"></span><i class="door__knob"></i></div>
-        <div class="door door--r"><span class="door__arch"></span><i class="door__knob"></i></div>
         <div class="preloader__mark">
           {% render 'wordmark', write: true, uid: 'preloader', class: 'preloader__logo' %}
           <p class="preloader__tag">{{ settings.tagline | upcase }}</p>
