@@ -14,14 +14,45 @@
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var touch = matchMedia('(hover: none), (pointer: coarse)').matches;
 
-  /* Intro: the CSS plays it; we only tidy up (or skip it on a tap). */
-  if (root.classList.contains('is-loading')) {
-    var done = function () { root.classList.remove('is-loading'); };
-    setTimeout(done, 2500);
-    ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function (ev) {
-      addEventListener(ev, done, { once: true, passive: true });
-    });
-  }
+  /* Loader: the logo fills with ink as the page really loads (fonts, first film frame, window load).
+     No timeline — progress is eased toward what has actually arrived, then the sheet lifts away. */
+  var ready = false, readyFns = [];
+  var whenReady = function (fn) { ready ? fn() : readyFns.push(fn); };
+  var setReady = function () { if (ready) return; ready = true; readyFns.forEach(function (fn) { fn(); }); };
+  (function loader() {
+    var el = $('[data-loader]');
+    if (!root.classList.contains('is-loading') || !el) { root.classList.remove('is-loading'); setReady(); return; }
+    var count = $('[data-loader-count]', el);
+    var t0 = performance.now(), parts = 0, total = 3, target = 0, shown = 0, rush = false, finished = false;
+    var tick = function () { parts = Math.min(total, parts + 1); target = parts / total; };
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(tick, tick); else tick();
+    if (document.readyState === 'complete') tick(); else addEventListener('load', tick, { once: true });
+    var film = $('.look__video');
+    if (film && film.readyState < 2) {
+      film.addEventListener('loadeddata', tick, { once: true });
+      film.addEventListener('error', tick, { once: true });
+    } else tick();
+    setTimeout(function () { target = 1; }, 4500);
+    var hurry = function () { rush = true; target = 1; };
+    ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function (ev) { addEventListener(ev, hurry, { once: true, passive: true }); });
+    var finish = function () {
+      if (finished) return;
+      finished = true;
+      el.classList.add('is-done');
+      setReady();
+      setTimeout(function () { root.classList.remove('is-loading'); }, 1150);
+    };
+    (function frame(now) {
+      var floor = rush ? 1 : Math.min(1, (now - t0) / 1100); // never flashes by in under ~1s
+      var goal = Math.min(target, floor);
+      shown += (goal - shown) * (rush ? 0.3 : 0.085);
+      if (goal === 1 && shown > 0.996) shown = 1;
+      el.style.setProperty('--lp', shown.toFixed(4));
+      if (count) count.textContent = ('00' + Math.round(shown * 100)).slice(-3);
+      if (shown >= 1) return finish();
+      requestAnimationFrame(frame);
+    })(t0);
+  })();
 
   /* Money in the store's own format */
   function money(cents) {
@@ -66,35 +97,47 @@
 
   /* The arched window: geometry once, then a single --p variable on scroll */
   function hero(el) {
-    var stage = $('.hero__stage', el), svg = $('.hero__veil', el), video = $('video', el);
-    var camera = window.IHHero;
-    var progress = function () {
-      var rect = el.getBoundingClientRect();
-      var span = el.offsetHeight - innerHeight;
-      var p = span > 0 ? Math.min(1, Math.max(0, -rect.top / span)) : 0;
-      el.style.setProperty('--p', p.toFixed(4));
-      if (camera && stage && svg) camera(stage, svg, p);
-      el.classList.toggle('is-inside', p > 0.72);
+    var n = parseInt(el.style.getPropertyValue('--n'), 10) || 1;
+    var buttons = $$('[data-goto]', el), video = $('.look__video', el);
+    var cur = 0, goal = 0, raf = 0, on = -1;
+    // within each room the scroll holds briefly, then glides to the next one
+    var shape = function (f) {
+      if (f < 0.14) return 0;
+      if (f > 0.86) return 1;
+      f = (f - 0.14) / 0.72;
+      return f * f * (3 - 2 * f);
     };
-    progress();
-    addEventListener('resize', progress);
-    onScrollFns.push(progress);
-    // The film drifts a touch with the pointer, so the letters feel like glass
-    if (!touch && !reduce && stage) {
-      var raf = 0, hx = 0, hy = 0;
-      stage.addEventListener('pointermove', function (e) {
-        hx = (e.clientX / innerWidth - 0.5) * 2; hy = (e.clientY / innerHeight - 0.5) * 2;
-        if (!raf) raf = requestAnimationFrame(function () { raf = 0; stage.style.setProperty('--hx', hx.toFixed(3)); stage.style.setProperty('--hy', hy.toFixed(3)); });
+    var read = function () {
+      var raw = Math.min(n - 1, Math.max(0, -el.getBoundingClientRect().top / innerHeight));
+      var k = Math.floor(raw);
+      goal = k >= n - 1 ? n - 1 : k + shape(raw - k);
+      if (!raf) raf = requestAnimationFrame(step);
+    };
+    var step = function () {
+      raf = 0;
+      cur += (goal - cur) * (reduce ? 1 : 0.14);
+      if (Math.abs(goal - cur) < 0.0005) cur = goal;
+      el.style.setProperty('--t', cur.toFixed(4));
+      var idx = Math.round(cur);
+      if (idx !== on) {
+        on = idx;
+        buttons.forEach(function (b, i) { b.classList.toggle('is-on', i === idx); });
+        if (video) { if (idx === 0) { var pr = video.play(); if (pr && pr.catch) pr.catch(function () {}); } else video.pause(); }
+      }
+      if (cur !== goal) raf = requestAnimationFrame(step);
+    };
+    onScrollFns.push(read);
+    addEventListener('resize', read);
+    read();
+    buttons.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var i = parseInt(b.dataset.goto, 10) || 0;
+        scrollTo({ top: el.getBoundingClientRect().top + scrollY + i * innerHeight, behavior: reduce ? 'auto' : 'smooth' });
       });
-      stage.addEventListener('pointerleave', function () { stage.style.setProperty('--hx', 0); stage.style.setProperty('--hy', 0); });
-    }
-    var start = function () {
-      el.classList.add('is-ready');
-      if (video) { var pr = video.play(); if (pr && pr.catch) pr.catch(function () {}); }
-    };
-    requestAnimationFrame(start);
+    });
+    whenReady(function () { requestAnimationFrame(function () { el.classList.add('is-ready'); }); });
     if (video && io) new IntersectionObserver(function (en) {
-      if (en[0].isIntersecting) { var pr = video.play(); if (pr && pr.catch) pr.catch(function () {}); } else video.pause();
+      if (en[0].isIntersecting && on === 0) { var pr = video.play(); if (pr && pr.catch) pr.catch(function () {}); } else video.pause();
     }).observe(el);
   }
 

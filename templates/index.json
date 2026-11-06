@@ -4,11 +4,44 @@
       "type": "hero-window",
       "settings": {
         "eyebrow": "Fall 2026 — Loungewear for living in",
-        "eyebrow_right": "N° 01 — The Day In edit",
         "title": "wear it. live in it.",
-        "caption": "Come in. Stay a while.",
-        "cue": "Scroll to step inside"
-      }
+        "index_first": "The haus",
+        "cue": "Scroll to walk through"
+      },
+      "blocks": {
+        "dayin": {
+          "type": "room",
+          "settings": {
+            "name": "Day In",
+            "line": "Curtains half open. Nowhere to be.",
+            "collection": "day-in",
+            "fallback": "l-look-dayin"
+          }
+        },
+        "friends": {
+          "type": "room",
+          "settings": {
+            "name": "Friend’s House",
+            "line": "Strawberries, old films, one more episode.",
+            "collection": "friends-house",
+            "fallback": "l-look-friends"
+          }
+        },
+        "errand": {
+          "type": "room",
+          "settings": {
+            "name": "Quick Errand",
+            "line": "Matcha run. Back before it cools.",
+            "collection": "quick-errand",
+            "fallback": "l-look-errand"
+          }
+        }
+      },
+      "block_order": [
+        "dayin",
+        "friends",
+        "errand"
+      ]
     },
     "manifesto": {
       "type": "manifesto",
@@ -23,44 +56,6 @@
         "limit": 6,
         "skip_little_things": true
       }
-    },
-    "rooms": {
-      "type": "rooms",
-      "blocks": {
-        "r1": {
-          "type": "room",
-          "settings": {
-            "collection": "day-in",
-            "name": "Day In",
-            "line": "Curtains half open. Nowhere to be.",
-            "fallback": "l-stretch.webp"
-          }
-        },
-        "r2": {
-          "type": "room",
-          "settings": {
-            "collection": "friends-house",
-            "name": "Friend’s House",
-            "line": "Strawberries, old films, one more episode.",
-            "fallback": "l-friends.webp"
-          }
-        },
-        "r3": {
-          "type": "room",
-          "settings": {
-            "collection": "quick-errand",
-            "name": "Quick Errand",
-            "line": "Matcha run. Back before it cools.",
-            "fallback": "l-cafe.webp"
-          }
-        }
-      },
-      "block_order": [
-        "r1",
-        "r2",
-        "r3"
-      ],
-      "settings": {}
     },
     "fabric": {
       "type": "fabric-touch",
@@ -198,7 +193,6 @@
     "hero",
     "manifesto",
     "edit",
-    "rooms",
     "fabric",
     "diary",
     "unboxing",

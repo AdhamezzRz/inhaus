@@ -37,7 +37,7 @@
           d.classList.add('is-loading');
           sessionStorage.setItem('innhaus-intro-seen', '1');
           // The intro is pure CSS; this is only a safety net if scripts never arrive.
-          setTimeout(function () { d.classList.remove('is-loading'); }, 4200);
+          setTimeout(function () { d.classList.remove('is-loading'); }, 6500);
         }
         {%- endif %}
       } catch (e) {}
@@ -51,12 +51,16 @@
     <a class="skip-link sr-only" href="#main">Skip to content</a>
     {% render 'wordmark-sprite' %}
 
-    {%- if settings.show_preloader and template.name != 'index' -%}
-      {%- comment -%} On the home page the hero plays the intro itself. {%- endcomment -%}
-      <div class="preloader" aria-hidden="true">
-        <div class="preloader__mark">
-          {% render 'wordmark', write: true, uid: 'preloader', class: 'preloader__logo' %}
-          <p class="preloader__tag">{{ settings.tagline | upcase }}</p>
+    {%- if settings.show_preloader -%}
+      {%- comment -%} The loader fills the logo with ink as the page really loads — no timeline. {%- endcomment -%}
+      <div class="loader" aria-hidden="true" data-loader>
+        <div class="loader__mark">
+          <span class="loader__ghost">{% render 'wordmark' %}</span>
+          <span class="loader__ink">{% render 'wordmark' %}</span>
+        </div>
+        <div class="loader__foot">
+          <span>{{ settings.tagline }}</span>
+          <span class="loader__count" data-loader-count>000</span>
         </div>
       </div>
     {%- endif -%}
