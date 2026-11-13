@@ -1,30 +1,14 @@
-{%- liquid
-  assign room_tag = ''
-  for t in product.tags
-    if t contains 'room:'
-      assign room_tag = t
-    endif
-  endfor
-  assign shown = 0
--%}
-<section class="related" data-header-tone="dark">
-  <div class="section-head">
-    <p class="t-caps">{{ section.settings.label }}</p>
-    <h2 class="t-display" data-reveal>{{ section.settings.title }}</h2>
-  </div>
-  <div class="pgrid pgrid--four">
+{%- assign shown = 0 -%}
+<section class="erow erow--related" data-header-tone="dark">
+  <header class="erow__head" data-reveal>
+    <h2 class="ed-label">{{ section.settings.title }}</h2>
+    <a class="ed-link" href="{{ routes.all_products_collection_url }}">View all</a>
+  </header>
+  <div class="erow__track">
     {%- for p in collections.all.products limit: 50 -%}
-      {%- if p.id != product.id and room_tag != '' and p.tags contains room_tag and shown < 4 -%}
-        {% render 'product-card', product: p, index: shown %}
+      {%- if p.id != product.id and p.type != product.type and shown < 5 -%}
+        {% render 'product-card', product: p, sizes: '(max-width: 760px) 62vw, 20vw' %}
         {%- assign shown = shown | plus: 1 -%}
-      {%- endif -%}
-    {%- endfor -%}
-    {%- for p in collections.all.products limit: 50 -%}
-      {%- if p.id != product.id and shown < 4 -%}
-        {%- unless room_tag != '' and p.tags contains room_tag -%}
-          {% render 'product-card', product: p, index: shown %}
-          {%- assign shown = shown | plus: 1 -%}
-        {%- endunless -%}
       {%- endif -%}
     {%- endfor -%}
   </div>
@@ -32,10 +16,9 @@
 
 {% schema %}
 {
-  "name": "Complete the look",
+  "name": "Related products",
   "settings": [
-    { "type": "text", "id": "label", "label": "Label", "default": "From the same room" },
-    { "type": "text", "id": "title", "label": "Title", "default": "complete the look" }
+    { "type": "text", "id": "title", "label": "Title", "default": "You may also like" }
   ]
 }
 {% endschema %}

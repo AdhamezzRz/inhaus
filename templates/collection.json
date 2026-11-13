@@ -3,16 +3,9 @@
     "main": {
       "type": "main-collection",
       "settings": {
-        "rooms": [
-          "day-in",
-          "friends-house",
-          "quick-errand",
-          "little-things"
-        ]
+        "rooms": ["robe-sets", "wrap-sets", "cardigan-sets", "lace-henley-sets"]
       }
     }
   },
-  "order": [
-    "main"
-  ]
+  "order": ["main"]
 }

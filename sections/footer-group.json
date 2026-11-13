@@ -5,15 +5,9 @@
     "footer": {
       "type": "footer",
       "settings": {
-        "eyebrow": "The haus list",
-        "title": "come over more often",
-        "text": "New drops and first dibs on restocks.",
-        "rooms": ["day-in", "friends-house", "quick-errand", "little-things"],
+        "eyebrow": "Join the haus list",
         "menu": "inhaus-footer",
-        "email": "hello@innhaus.com",
-        "instagram": "innhaus",
-        "tiktok": "innhaus",
-        "base_note": "Made in Cairo, for staying in"
+        "name": "Inn Haus"
       }
     }
   },

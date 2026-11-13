@@ -27,10 +27,10 @@
     var tick = function () { parts = Math.min(total, parts + 1); target = parts / total; };
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(tick, tick); else tick();
     if (document.readyState === 'complete') tick(); else addEventListener('load', tick, { once: true });
-    var film = $('.look__video');
-    if (film && film.readyState < 2) {
-      film.addEventListener('loadeddata', tick, { once: true });
-      film.addEventListener('error', tick, { once: true });
+    var first = $('.ehero__media img');
+    if (first && !first.complete) {
+      first.addEventListener('load', tick, { once: true });
+      first.addEventListener('error', tick, { once: true });
     } else tick();
     setTimeout(function () { target = 1; }, 4500);
     var hurry = function () { rush = true; target = 1; };
@@ -97,56 +97,21 @@
 
   /* The arched window: geometry once, then a single --p variable on scroll */
   function hero(el) {
-    var n = parseInt(el.style.getPropertyValue('--n'), 10) || 1;
-    var buttons = $$('[data-goto]', el), video = $('.look__video', el);
-    var cur = 0, goal = 0, raf = 0, on = -1;
-    // within each room the scroll holds briefly, then glides to the next one
-    var shape = function (f) {
-      if (f < 0.14) return 0;
-      if (f > 0.86) return 1;
-      f = (f - 0.14) / 0.72;
-      return f * f * (3 - 2 * f);
+    // the photo drifts a little slower than the page; one transform, nothing else
+    var media = $('.ehero__media', el);
+    var move = function () {
+      var y = Math.min(innerHeight, Math.max(0, scrollY));
+      if (media) media.style.transform = 'translate3d(0,' + (y * 0.12).toFixed(1) + 'px,0)';
     };
-    var read = function () {
-      var raw = Math.min(n - 1, Math.max(0, -el.getBoundingClientRect().top / innerHeight));
-      var k = Math.floor(raw);
-      goal = k >= n - 1 ? n - 1 : k + shape(raw - k);
-      if (!raf) raf = requestAnimationFrame(step);
-    };
-    var step = function () {
-      raf = 0;
-      cur += (goal - cur) * (reduce ? 1 : 0.14);
-      if (Math.abs(goal - cur) < 0.0005) cur = goal;
-      el.style.setProperty('--t', cur.toFixed(4));
-      var idx = Math.round(cur);
-      if (idx !== on) {
-        on = idx;
-        buttons.forEach(function (b, i) { b.classList.toggle('is-on', i === idx); });
-        if (video) { if (idx === 0) { var pr = video.play(); if (pr && pr.catch) pr.catch(function () {}); } else video.pause(); }
-      }
-      if (cur !== goal) raf = requestAnimationFrame(step);
-    };
-    onScrollFns.push(read);
-    addEventListener('resize', read);
-    read();
-    buttons.forEach(function (b) {
-      b.addEventListener('click', function () {
-        var i = parseInt(b.dataset.goto, 10) || 0;
-        scrollTo({ top: el.getBoundingClientRect().top + scrollY + i * innerHeight, behavior: reduce ? 'auto' : 'smooth' });
-      });
-    });
+    if (!reduce) { onScrollFns.push(move); move(); }
     whenReady(function () { requestAnimationFrame(function () { el.classList.add('is-ready'); }); });
-    if (video && io) new IntersectionObserver(function (en) {
-      if (en[0].isIntersecting && on === 0) { var pr = video.play(); if (pr && pr.catch) pr.catch(function () {}); } else video.pause();
-    }).observe(el);
   }
 
-  /* Unboxing: turn the thank you card over */
-  $$('[data-flip]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      var on = b.classList.toggle('is-flipped');
-      b.setAttribute('aria-pressed', on ? 'true' : 'false');
-    });
+  /* The film plays only while it is on screen */
+  if (io) $$('[data-film]').forEach(function (v) {
+    new IntersectionObserver(function (en) {
+      if (en[0].isIntersecting) { var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); } else v.pause();
+    }, { threshold: 0.25 }).observe(v);
   });
 
   /* Header: hide on the way down, tone from the section underneath, menu */
@@ -301,33 +266,12 @@
     return { add: add };
   })();
 
-  /* Quick add from product cards */
-  document.addEventListener('click', function (e) {
-    var b = e.target.closest('[data-quick-add]');
-    if (!b) return;
-    e.preventDefault();
-    e.stopPropagation();
-    var frame = b.closest('.pcard__frame'), img = frame && $('img', frame);
-    b.classList.add('is-busy');
-    Pouch.add(b.dataset.quickAdd, frame, img ? img.currentSrc || img.src : '')
-      .catch(function (err) { alert(err.message); })
-      .then(function () { b.classList.remove('is-busy'); });
-  }, true);
 
-  /* Product cards: the lifestyle photo opens from where the cursor enters */
-  document.addEventListener('pointerover', function (e) {
-    var f = e.target.closest && e.target.closest('.pcard__frame');
-    if (!f || f.contains(e.relatedTarget)) return;
-    var r = f.getBoundingClientRect();
-    f.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
-    f.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
-  });
-
-  /* Shop: room chips filter /collections/all in place, and sorting */
+  /* Shop: filter by set without a reload, and sort */
   function collection(el) {
     var grid = $('[data-grid]', el);
     if (!grid) return;
-    var cards = function () { return $$('.pcard', grid); };
+    var cards = function () { return $$('.card', grid); };
     var original = cards();
     var line = $('[data-roomline]', el);
     var swap = function (fn) {

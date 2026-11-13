@@ -1,0 +1,41 @@
+{%- liquid
+  assign wide = section.settings.fallback | append: '.webp' | asset_url
+  assign tall = section.settings.fallback | append: '-m.webp' | asset_url
+  if section.settings.image != blank
+    assign wide = section.settings.image | image_url: width: 2800
+  endif
+  if section.settings.image_mobile != blank
+    assign tall = section.settings.image_mobile | image_url: width: 1200
+  endif
+  assign href = section.settings.link | default: routes.all_products_collection_url
+-%}
+<section class="eban" data-header-tone="dark">
+  <a class="eban__media" href="{{ href }}" data-reveal aria-label="{{ section.settings.title | escape }}">
+    <picture>
+      <source media="(max-width: 760px)" srcset="{{ tall }}">
+      <img src="{{ wide }}" alt="{{ section.settings.alt | escape }}" loading="lazy" decoding="async" width="2400" height="1500">
+    </picture>
+  </a>
+  <div class="eban__cap" data-reveal>
+    {%- if section.settings.label != blank -%}<p class="ed-label">{{ section.settings.label }}</p>{%- endif -%}
+    <h2 class="ed-title">{{ section.settings.title }}</h2>
+    {%- if section.settings.link_label != blank -%}<a class="ed-link" href="{{ href }}">{{ section.settings.link_label }}</a>{%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Photo banner",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo (wide)" },
+    { "type": "image_picker", "id": "image_mobile", "label": "Photo (phone, tall)" },
+    { "type": "text", "id": "fallback", "label": "Built-in photo", "info": "Theme asset name without .webp", "default": "ih-duo" },
+    { "type": "text", "id": "alt", "label": "Photo description", "default": "Two models in the wrap set, chocolate and chartreuse" },
+    { "type": "text", "id": "label", "label": "Small label", "default": "In two colours" },
+    { "type": "text", "id": "title", "label": "Title", "default": "The Wrap Set" },
+    { "type": "text", "id": "link_label", "label": "Link text", "default": "Shop the wrap set" },
+    { "type": "url", "id": "link", "label": "Link" }
+  ],
+  "presets": [{ "name": "Photo banner" }]
+}
+{% endschema %}

@@ -1,0 +1,40 @@
+<section class="etiles" data-header-tone="dark">
+  {%- if section.settings.title != blank -%}<h2 class="ed-label etiles__head" data-reveal>{{ section.settings.title }}</h2>{%- endif -%}
+  <div class="etiles__grid">
+    {%- for block in section.blocks -%}
+      {%- assign c = block.settings.collection -%}
+      {%- if c != blank -%}
+        <a class="etile" href="{{ c.url }}" data-reveal {{ block.shopify_attributes }}>
+          <span class="etile__num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+          <span class="etile__img">
+            {%- assign img = block.settings.image | default: c.featured_image -%}
+            {%- if img -%}{{ img | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360,540,720,900', sizes: '(max-width: 760px) 46vw, 22vw', alt: c.title }}{%- endif -%}
+          </span>
+          <span class="ed-link">{{ block.settings.title | default: c.title }}</span>
+        </a>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Numbered tiles",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "title", "label": "Title", "default": "The sets" }
+  ],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Tile",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "text", "id": "title", "label": "Link text", "info": "Leave empty to use the collection name." },
+        { "type": "image_picker", "id": "image", "label": "Photo", "info": "Leave empty to use the collection photo." }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Numbered tiles" }]
+}
+{% endschema %}

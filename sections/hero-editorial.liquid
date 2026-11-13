@@ -1,0 +1,39 @@
+{%- liquid
+  assign wide = 'ih-hero.webp' | asset_url
+  assign tall = 'ih-hero-m.webp' | asset_url
+  if section.settings.image != blank
+    assign wide = section.settings.image | image_url: width: 2800
+  endif
+  if section.settings.image_mobile != blank
+    assign tall = section.settings.image_mobile | image_url: width: 1200
+  endif
+-%}
+<section class="ehero" data-header-tone="dark" data-section-type="hero">
+  <picture class="ehero__media">
+    <source media="(max-width: 760px), (max-aspect-ratio: 1/1)" srcset="{{ tall }}">
+    <img src="{{ wide }}" alt="{{ section.settings.alt | escape }}" fetchpriority="high" decoding="async" width="2560" height="1600">
+  </picture>
+  <div class="ehero__copy">
+    {%- if section.settings.label != blank -%}<p class="ed-label ehero__line">{{ section.settings.label }}</p>{%- endif -%}
+    <h1 class="ed-title ehero__title ehero__line">{{ section.settings.title }}</h1>
+    {%- if section.settings.link_label != blank -%}
+      <a class="ed-link ehero__line" href="{{ section.settings.link | default: routes.all_products_collection_url }}">{{ section.settings.link_label }}</a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Photo (wide)" },
+    { "type": "image_picker", "id": "image_mobile", "label": "Photo (phone, tall)" },
+    { "type": "text", "id": "alt", "label": "Photo description", "default": "Model reclining in the chocolate wrap set" },
+    { "type": "text", "id": "label", "label": "Small label", "default": "The first collection" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Wear it. Live in it." },
+    { "type": "text", "id": "link_label", "label": "Link text", "default": "Shop the collection" },
+    { "type": "url", "id": "link", "label": "Link" }
+  ],
+  "presets": [{ "name": "Hero" }]
+}
+{% endschema %}

@@ -1,0 +1,17 @@
+<section class="estate" data-header-tone="dark" data-reveal>
+  {%- if section.settings.label != blank -%}<p class="ed-label">{{ section.settings.label }}</p>{%- endif -%}
+  <h2 class="estate__text">{{ section.settings.title }}</h2>
+  {%- if section.settings.text != blank -%}<p class="estate__sub">{{ section.settings.text }}</p>{%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Statement",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Small label" },
+    { "type": "text", "id": "title", "label": "Statement", "default": "Made for staying in. Worn out anyway." },
+    { "type": "text", "id": "text", "label": "Line underneath", "default": "Four sets, ten colours, one very soft knit." }
+  ],
+  "presets": [{ "name": "Statement" }]
+}
+{% endschema %}

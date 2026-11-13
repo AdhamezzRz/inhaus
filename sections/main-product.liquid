@@ -1,22 +1,15 @@
 {%- liquid
   assign current = product.selected_or_first_available_variant
-  assign badge = ''
-  if product.tags contains 'bestseller'
-    assign badge = 'Bestseller'
-  elsif product.tags contains 'new'
-    assign badge = 'New'
-  endif
-  assign swatch = product.metafields.inhaus.color_hex.value | default: '#737B5B'
   assign colour = product.metafields.inhaus.color_name.value
   assign subtitle = product.metafields.inhaus.subtitle.value | default: product.type
   assign details = product.metafields.inhaus.details.value | newline_to_br | split: '<br />'
-  assign room_key = ''
-  for t in product.tags
-    if t contains 'room:'
-      assign room_key = t | remove: 'room:'
+  assign room_collection = nil
+  for c in product.collections
+    if c.handle contains '-sets'
+      assign room_collection = c
     endif
   endfor
-  assign room_collection = collections[room_key]
+  assign name = product.title | split: ' — ' | first
   assign only_one = product.has_only_default_variant
   if product.variants.size == 1
     assign only_one = true
@@ -34,12 +27,6 @@
         -%}
         <div class="pv__shot{% if forloop.first %} pv__shot--hero{% endif %}"{% if forloop.first %} data-fly-source{% endif %}>
           {{ media | image_url: width: 1600 | image_tag: widths: '600,900,1200,1600', sizes: '(max-width: 860px) 86vw, 55vw', alt: media.alt, loading: load }}
-          {%- if forloop.first -%}
-            <div class="pv__hangtag" aria-hidden="true">
-              <span class="pv__hangtag-string"></span>
-              <span class="pv__hangtag-body">WEAR IT.<br>LIVE IN IT.</span>
-            </div>
-          {%- endif -%}
         </div>
       {%- endfor -%}
     </div>
@@ -49,8 +36,7 @@
         <a href="{{ routes.all_products_collection_url }}">Shop</a>
         {%- if room_collection != blank -%}<span>/</span><a href="{{ room_collection.url }}">{{ room_collection.title }}</a>{%- endif -%}
       </nav>
-      {%- if badge != '' -%}<span class="pv__badge">{{ badge }}</span>{%- endif -%}
-      <h1 class="pv__title t-display">{{ product.title }}</h1>
+      <h1 class="pv__title ed-title">{{ name }}</h1>
       <p class="pv__sub t-caps">{{ subtitle }}</p>
       <p class="pv__price">
         <span data-price>{{ current.price | money_without_trailing_zeros }}</span>
@@ -59,9 +45,16 @@
       <div class="pv__desc rte">{{ product.description }}</div>
 
       {%- if colour != blank -%}
-        <div class="pv__colour">
-          {% render 'button-mark', color: swatch, class: 'pv__btn' %}
-          <span><small class="t-caps">Colour</small>{{ colour }}</span>
+        <div class="pv__colours">
+          <p class="ed-label">Colour — <span>{{ colour }}</span></p>
+          {%- if room_collection and room_collection.products_count > 1 -%}
+            <div class="pv__swatches">
+              {%- for sib in room_collection.products -%}
+                {%- assign sib_hex = sib.metafields.inhaus.color_hex.value | default: '#737B5B' -%}
+                <a href="{{ sib.url }}" class="pv__swatch{% if sib.id == product.id %} is-on{% endif %}" style="--c: {{ sib_hex }}" title="{{ sib.metafields.inhaus.color_name.value | escape }}" aria-label="{{ sib.metafields.inhaus.color_name.value | escape }}"{% if sib.id == product.id %} aria-current="true"{% endif %}></a>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
         </div>
       {%- endif -%}
 
@@ -71,7 +64,6 @@
           <div class="pv__sizes" role="radiogroup" aria-label="{{ product.options.first }}">
             <div class="pv__sizes-head">
               <small class="t-caps">{{ product.options.first }}</small>
-              {%- if pages['the-haus'].url -%}<a href="{{ pages['the-haus'].url }}#care" class="ulink t-caps">Size guide</a>{%- endif -%}
             </div>
             <div class="pv__size-row">
               {%- for v in product.variants -%}
@@ -96,11 +88,6 @@
         </button>
       {%- endform -%}
 
-      <ul class="pv__perks">
-        {%- for block in section.blocks -%}
-          {%- if block.type == 'perk' -%}<li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>{%- endif -%}
-        {%- endfor -%}
-      </ul>
 
       <div class="pv__accs">
         {%- if details.size > 0 and product.metafields.inhaus.details != blank -%}
@@ -127,7 +114,7 @@
     </aside>
 
     <div class="pv__mobilebar">
-      <span><b>{{ product.title }}</b><span data-price>{{ current.price | money_without_trailing_zeros }}</span></span>
+      <span><b>{{ name }}</b><span data-price>{{ current.price | money_without_trailing_zeros }}</span></span>
       <button type="button" class="btn btn--sage" data-mobile-add><span>{% if only_one %}Add to pouch{% else %}Pick a size{% endif %}</span></button>
     </div>
   </div>

@@ -2,13 +2,13 @@
   "current": {
     "tagline": "Wear it. Live in it.",
     "show_preloader": true,
-    "free_shipping_threshold": 5000
+    "free_shipping_threshold": 0
   },
   "presets": {
     "Default": {
       "tagline": "Wear it. Live in it.",
       "show_preloader": true,
-      "free_shipping_threshold": 5000
+      "free_shipping_threshold": 0
     }
   }
 }

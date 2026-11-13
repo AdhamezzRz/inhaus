@@ -1,9 +1,8 @@
-{%- comment -%} The cart, as a sage linen pouch tied with a black satin ribbon. Lines are rendered by inhaus.js from /cart.js. {%- endcomment -%}
+{%- comment -%} The cart drawer. Lines are rendered by inhaus.js from /cart.js. {%- endcomment -%}
 <div class="pouch" aria-hidden="true" data-pouch>
   <div class="pouch__veil" data-pouch-close></div>
   <aside class="pouch__panel" role="dialog" aria-modal="true" aria-label="Your pouch">
     <div class="pouch__stitch"></div>
-    {% render 'ribbon-bow', class: 'pouch__ribbon' %}
     <header class="pouch__head">
       <p class="t-caps">Your pouch</p>
       <h2 class="t-display" data-pouch-title>{% if cart.item_count == 0 %}still empty{% else %}{{ cart.item_count }} soft thing{% if cart.item_count != 1 %}s{% endif %}{% endif %}</h2>

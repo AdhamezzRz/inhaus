@@ -1,201 +1,63 @@
 {
   "sections": {
     "hero": {
-      "type": "hero-window",
+      "type": "hero-editorial",
       "settings": {
-        "eyebrow": "Fall 2026 — Loungewear for living in",
-        "title": "wear it. live in it.",
-        "index_first": "The haus",
-        "cue": "Scroll to walk through"
-      },
-      "blocks": {
-        "dayin": {
-          "type": "room",
-          "settings": {
-            "name": "Day In",
-            "line": "Curtains half open. Nowhere to be.",
-            "collection": "day-in",
-            "fallback": "l-look-dayin"
-          }
-        },
-        "friends": {
-          "type": "room",
-          "settings": {
-            "name": "Friend’s House",
-            "line": "Strawberries, old films, one more episode.",
-            "collection": "friends-house",
-            "fallback": "l-look-friends"
-          }
-        },
-        "errand": {
-          "type": "room",
-          "settings": {
-            "name": "Quick Errand",
-            "line": "Matcha run. Back before it cools.",
-            "collection": "quick-errand",
-            "fallback": "l-look-errand"
-          }
-        }
-      },
-      "block_order": [
-        "dayin",
-        "friends",
-        "errand"
-      ]
-    },
-    "manifesto": {
-      "type": "manifesto",
-      "settings": {
-        "label": "A note from the haus",
-        "sign": "— with love, from the haus"
+        "label": "The first collection",
+        "title": "Wear it. Live in it.",
+        "link_label": "Shop the collection"
       }
     },
-    "edit": {
+    "statement": {
+      "type": "statement",
+      "settings": {
+        "title": "Made for staying in. Worn out anyway.",
+        "text": "Four sets, ten colours, one very soft knit."
+      }
+    },
+    "new": {
       "type": "featured-products",
       "settings": {
-        "limit": 6,
-        "skip_little_things": true
+        "title": "New in",
+        "button": "View all",
+        "products": [
+          "wrap-set-chartreuse",
+          "robe-set-espresso",
+          "cardigan-set-oat",
+          "lace-henley-set-burgundy",
+          "robe-set-grey"
+        ]
       }
     },
-    "fabric": {
-      "type": "fabric-touch",
-      "blocks": {
-        "f1": {
-          "type": "fact",
-          "settings": {
-            "value": "120",
-            "label": "gsm poplin"
-          }
-        },
-        "f2": {
-          "type": "fact",
-          "settings": {
-            "value": "100%",
-            "label": "long-staple cotton"
-          }
-        },
-        "f3": {
-          "type": "fact",
-          "settings": {
-            "value": "∞",
-            "label": "washes softer"
-          }
-        }
-      },
-      "block_order": [
-        "f1",
-        "f2",
-        "f3"
-      ],
-      "settings": {}
-    },
-    "diary": {
-      "type": "polaroid-wall",
-      "blocks": {
-        "p1": {
-          "type": "polaroid",
-          "settings": {
-            "fallback": "l-cafe.webp",
-            "caption": "quick errand",
-            "frame": "burgundy"
-          }
-        },
-        "p2": {
-          "type": "polaroid",
-          "settings": {
-            "fallback": "l-friends.webp",
-            "caption": "friend’s house",
-            "frame": "sage"
-          }
-        },
-        "p3": {
-          "type": "polaroid",
-          "settings": {
-            "fallback": "l-stretch.webp",
-            "caption": "day in",
-            "frame": "blue"
-          }
-        },
-        "p4": {
-          "type": "polaroid",
-          "settings": {
-            "fallback": "l-reading.webp",
-            "caption": "chapter eleven",
-            "frame": "cream"
-          }
-        },
-        "p5": {
-          "type": "polaroid",
-          "settings": {
-            "fallback": "l-bordeaux.webp",
-            "caption": "stayed in on purpose",
-            "frame": "blue"
-          }
-        },
-        "p6": {
-          "type": "polaroid",
-          "settings": {
-            "fallback": "l-kitchen.webp",
-            "caption": "sunday, 9am",
-            "frame": "sage"
-          }
-        },
-        "p7": {
-          "type": "polaroid",
-          "settings": {
-            "fallback": "p-boxers.webp",
-            "caption": "the good pyjamas",
-            "frame": "cream"
-          }
-        },
-        "p8": {
-          "type": "polaroid",
-          "settings": {
-            "fallback": "l-wrap-pouch.webp",
-            "caption": "wrapped like a gift",
-            "frame": "burgundy"
-          }
-        },
-        "p9": {
-          "type": "polaroid",
-          "settings": {
-            "fallback": "p-socks.webp",
-            "caption": "slouched, always",
-            "frame": "sage"
-          }
-        }
-      },
-      "block_order": [
-        "p1",
-        "p2",
-        "p3",
-        "p4",
-        "p5",
-        "p6",
-        "p7",
-        "p8",
-        "p9"
-      ],
-      "settings": {}
-    },
-    "unboxing": {
-      "type": "packaging",
-      "settings": {}
-    },
-    "journal": {
-      "type": "journal-teaser",
+    "banner": {
+      "type": "image-banner",
       "settings": {
-        "blog": "journal"
+        "fallback": "ih-duo",
+        "label": "In three colours",
+        "title": "The Wrap Set",
+        "link_label": "Shop the wrap set",
+        "link": "shopify://collections/wrap-sets"
+      }
+    },
+    "tiles": {
+      "type": "style-tiles",
+      "blocks": {
+        "t1": { "type": "tile", "settings": { "collection": "robe-sets" } },
+        "t2": { "type": "tile", "settings": { "collection": "wrap-sets" } },
+        "t3": { "type": "tile", "settings": { "collection": "cardigan-sets" } },
+        "t4": { "type": "tile", "settings": { "collection": "lace-henley-sets" } }
+      },
+      "block_order": ["t1", "t2", "t3", "t4"],
+      "settings": { "title": "The sets" }
+    },
+    "film": {
+      "type": "film",
+      "settings": {
+        "label": "The film",
+        "title": "At home, in Inn Haus.",
+        "link_label": "Shop the collection"
       }
     }
   },
-  "order": [
-    "hero",
-    "manifesto",
-    "edit",
-    "fabric",
-    "diary",
-    "unboxing",
-    "journal"
-  ]
+  "order": ["hero", "statement", "new", "banner", "tiles", "film"]
 }
